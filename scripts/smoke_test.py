@@ -8,6 +8,7 @@ import tempfile
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "server"))
 os.environ["MEMORY_DATA_DIR"] = tempfile.mkdtemp(prefix="mem_test_")
+os.environ["HANDOFF_DB_PATH"] = os.path.join(os.environ["MEMORY_DATA_DIR"], "test.db")
 os.environ["MEMORY_LLM_PROVIDER"] = "fake"  # 内置规则模型，零成本端到端
 
 from fastapi.testclient import TestClient  # noqa: E402

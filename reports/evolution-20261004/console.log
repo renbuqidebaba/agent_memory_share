@@ -1,0 +1,19 @@
+[10/04/26 18:07:11] INFO     Tool 'handoff_ack' failed: 'Error     server.py:453
+                             executing tool handoff_ack:                        
+                             接受交接必须引用本任务、当前领取者的               
+                             核验记录'                                          
+[10/04/26 18:07:21] INFO     Tool 'handoff_claim' failed: 'Error   server.py:453
+                             executing tool handoff_claim:                      
+                             交接包当前状态为 claimed，不可领取'                
+[10/04/26 18:10:19] INFO     Tool 'handoff_create' rejected        server.py:450
+                             arguments: ['payload.from_agent',                  
+                             'payload.goal',                                    
+                             'payload.status_summary',                          
+                             'payload.task_id']                                 
+[10/04/26 18:10:20] INFO     Tool 'handoff_get' failed: 'Error     server.py:453
+                             executing tool handoff_get: handoff                
+                             not found'                                         
+                    INFO     Tool 'handoff_verify' failed: 'Error  server.py:453
+                             executing tool handoff_verify:                     
+                             handoff not found'                                 
+{"timestamp_utc": "2026-10-04T10:10:26.179049+00:00", "sqlite": "3.53.1", "duration_seconds": 67.335, "tests_run": 81, "passed": 81, "failed_cases": 0, "skipped": 0, "successful": true}

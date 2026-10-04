@@ -1,11 +1,32 @@
 """SQLite 连接与 schema 初始化。
 
-设计纪律（对应 PLAN.md §2）：
-- 所有数据集中在这一个文件里，agent 不直接读写，统一走 Server API
-- events 表是 append-only 事件日志，seq 单调递增，为未来 P2 跨设备同步预留
+CLI、MCP 和 HTTP 共用本地数据库。PRAGMA user_version 记录数据库格式版本。
+事件随状态在同一事务提交；显式清理历史交接时也会清理关联事件。
 """
 import sqlite3
-from .config import DB_PATH, DATA_DIR
+from .config import DB_PATH
+
+SCHEMA_VERSION = 2
+
+EVIDENCE_SCHEMA = """
+CREATE TABLE IF NOT EXISTS handoff_verifications (
+  id TEXT PRIMARY KEY,
+  handoff_id TEXT NOT NULL REFERENCES handoffs(id) ON DELETE CASCADE,
+  agent_id TEXT NOT NULL,
+  claim_until TEXT NOT NULL,
+  payload_digest TEXT NOT NULL,
+  workspace TEXT NOT NULL,
+  result TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_verifications_handoff ON handoff_verifications(handoff_id);
+CREATE TABLE IF NOT EXISTS handoff_check_runs (
+  id TEXT PRIMARY KEY,
+  workspace TEXT NOT NULL,
+  result TEXT NOT NULL,
+  created_at TEXT NOT NULL
+);
+"""
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS memories (
@@ -35,13 +56,30 @@ CREATE TABLE IF NOT EXISTS messages (
   created_at  TEXT NOT NULL
 );
 
--- append-only 事件日志：P2 跨设备同步 = 复制这张表
+-- Local event history, not a cross-device replication protocol.
 CREATE TABLE IF NOT EXISTS events (
   seq         INTEGER PRIMARY KEY AUTOINCREMENT,
   type        TEXT NOT NULL,
   payload     TEXT NOT NULL,
   created_at  TEXT NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS handoffs (
+  id           TEXT PRIMARY KEY,
+  task_id      TEXT NOT NULL,
+  from_agent   TEXT NOT NULL,
+  to_agent     TEXT,
+  status       TEXT NOT NULL CHECK (status IN ('pending','claimed','accepted','rejected','completed','expired')),
+  payload      TEXT NOT NULL,
+  claimed_by   TEXT,
+  claim_until  TEXT,
+  response     TEXT,
+  created_at   TEXT NOT NULL,
+  updated_at   TEXT NOT NULL,
+  expires_at   TEXT NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_handoffs_task ON handoffs(task_id, created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_handoffs_status ON handoffs(status, expires_at);
 
 -- FTS5 全文检索：trigram 分词器支持中文子串匹配（unicode61 不切分 CJK）
 CREATE VIRTUAL TABLE IF NOT EXISTS memories_fts USING fts5(
@@ -55,7 +93,7 @@ CREATE INDEX IF NOT EXISTS idx_messages_session ON messages(session_id, summariz
 
 
 def get_conn() -> sqlite3.Connection:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    DB_PATH.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
@@ -66,7 +104,21 @@ def get_conn() -> sqlite3.Connection:
 def init_db() -> None:
     conn = get_conn()
     try:
-        conn.executescript(SCHEMA)
-        conn.commit()
+        with conn:
+            conn.execute("BEGIN IMMEDIATE")
+            version = conn.execute("PRAGMA user_version").fetchone()[0]
+            if version > SCHEMA_VERSION:
+                raise RuntimeError(f"数据库格式 {version} 高于本程序支持的 {SCHEMA_VERSION}；请升级程序")
+            if version == 0:
+                # Version 0 is the pre-release schema. All additions are idempotent;
+                # existing rows, IDs and events are retained without rewriting payloads.
+                for statement in SCHEMA.split(";"):
+                    if statement.strip():
+                        conn.execute(statement)
+            if version < 2:
+                for statement in EVIDENCE_SCHEMA.split(";"):
+                    if statement.strip():
+                        conn.execute(statement)
+            conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
     finally:
         conn.close()

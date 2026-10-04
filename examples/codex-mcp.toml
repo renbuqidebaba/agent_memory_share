@@ -1,0 +1,7 @@
+# Replace both absolute paths before adding this entry to your Codex config.
+[mcp_servers.agent_handoff]
+command = "/absolute/path/to/agent-handoff/.venv/bin/agent-handoff-mcp"
+startup_timeout_sec = 20
+
+[mcp_servers.agent_handoff.env]
+HANDOFF_DB_PATH = "/absolute/path/to/private-data/handoff.db"

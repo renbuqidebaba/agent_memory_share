@@ -1,0 +1,339 @@
+{
+  "$defs": {
+    "ArtifactRef": {
+      "properties": {
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sha256"
+        },
+        "note": {
+          "default": "",
+          "title": "Note",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "ArtifactRef",
+      "type": "object"
+    },
+    "SnapshotFile": {
+      "properties": {
+        "path": {
+          "minLength": 1,
+          "title": "Path",
+          "type": "string"
+        },
+        "sha256": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sha256"
+        },
+        "executable": {
+          "default": false,
+          "title": "Executable",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "SnapshotFile",
+      "type": "object"
+    },
+    "ValidationEvidence": {
+      "properties": {
+        "command": {
+          "minLength": 1,
+          "title": "Command",
+          "type": "string"
+        },
+        "outcome": {
+          "enum": [
+            "passed",
+            "failed",
+            "not_run"
+          ],
+          "title": "Outcome",
+          "type": "string"
+        },
+        "detail": {
+          "default": "",
+          "title": "Detail",
+          "type": "string"
+        }
+      },
+      "required": [
+        "command",
+        "outcome"
+      ],
+      "title": "ValidationEvidence",
+      "type": "object"
+    },
+    "WorkspaceSnapshot": {
+      "properties": {
+        "source": {
+          "const": "tool_observed",
+          "default": "tool_observed",
+          "title": "Source",
+          "type": "string"
+        },
+        "captured_at": {
+          "title": "Captured At",
+          "type": "string"
+        },
+        "git_head": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Git Head"
+        },
+        "git_branch": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Git Branch"
+        },
+        "tracked_changes": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Tracked Changes",
+          "type": "array"
+        },
+        "files": {
+          "items": {
+            "$ref": "#/$defs/SnapshotFile"
+          },
+          "title": "Files",
+          "type": "array"
+        },
+        "diff": {
+          "default": "",
+          "title": "Diff",
+          "type": "string"
+        },
+        "diff_truncated": {
+          "default": false,
+          "title": "Diff Truncated",
+          "type": "boolean"
+        },
+        "excluded": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Excluded",
+          "type": "array"
+        },
+        "untracked_not_included": {
+          "items": {
+            "type": "string"
+          },
+          "title": "Untracked Not Included",
+          "type": "array"
+        },
+        "capture_runtime": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "title": "Capture Runtime",
+          "type": "object"
+        }
+      },
+      "required": [
+        "captured_at"
+      ],
+      "title": "WorkspaceSnapshot",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "schema_version": {
+      "default": 1,
+      "enum": [
+        1,
+        2
+      ],
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "task_id": {
+      "minLength": 1,
+      "title": "Task Id",
+      "type": "string"
+    },
+    "from_agent": {
+      "minLength": 1,
+      "title": "From Agent",
+      "type": "string"
+    },
+    "to_agent": {
+      "anyOf": [
+        {
+          "minLength": 1,
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "To Agent"
+    },
+    "goal": {
+      "minLength": 1,
+      "title": "Goal",
+      "type": "string"
+    },
+    "status_summary": {
+      "minLength": 1,
+      "title": "Status Summary",
+      "type": "string"
+    },
+    "done_when": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Done When",
+      "type": "array"
+    },
+    "completed": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Completed",
+      "type": "array"
+    },
+    "decisions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Decisions",
+      "type": "array"
+    },
+    "next_steps": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Next Steps",
+      "type": "array"
+    },
+    "open_questions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Open Questions",
+      "type": "array"
+    },
+    "artifacts": {
+      "items": {
+        "$ref": "#/$defs/ArtifactRef"
+      },
+      "title": "Artifacts",
+      "type": "array"
+    },
+    "validation": {
+      "items": {
+        "$ref": "#/$defs/ValidationEvidence"
+      },
+      "title": "Validation",
+      "type": "array"
+    },
+    "source_revision": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Source Revision"
+    },
+    "workspace_root": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Workspace Root"
+    },
+    "require_verification": {
+      "default": false,
+      "title": "Require Verification",
+      "type": "boolean"
+    },
+    "workspace_snapshot": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/WorkspaceSnapshot"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "observed_checks": {
+      "items": {
+        "additionalProperties": true,
+        "type": "object"
+      },
+      "title": "Observed Checks",
+      "type": "array"
+    },
+    "ttl_seconds": {
+      "default": 86400,
+      "maximum": 2592000,
+      "minimum": 60,
+      "title": "Ttl Seconds",
+      "type": "integer"
+    }
+  },
+  "required": [
+    "task_id",
+    "from_agent",
+    "goal",
+    "status_summary"
+  ],
+  "title": "HandoffCreate",
+  "type": "object"
+}

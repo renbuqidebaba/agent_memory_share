@@ -1,0 +1,23 @@
+{
+  "successful": true,
+  "tests": {
+    "run": 81,
+    "passed": 81,
+    "failed": 0,
+    "skipped": 0,
+    "seconds": 67.335
+  },
+  "legacy_smoke": {
+    "passed": 21,
+    "failed": 0
+  },
+  "source_unchanged": true,
+  "source_file_count": 42,
+  "wheel_verified": true,
+  "prepared_trials": 6,
+  "completed_real_agent_trials": 0,
+  "artifact_sha256": {
+    "reports/local/evolution-dist/agent_handoff_local-0.1.0a1-py3-none-any.whl": "af7c1e2d6ec379fd4594771ca8e8a6fb22de7b4678ea425fb8bf133b63442a86",
+    "reports/local/evolution-dist/agent_handoff_local-0.1.0a1.tar.gz": "4e6601500898fabe8f9e80f5e320aa9bbc3c187c51c5c30c06c36ff9a61b5535"
+  }
+}

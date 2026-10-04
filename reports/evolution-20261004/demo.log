@@ -1,0 +1,100 @@
+{
+  "output": "/Users/lyw/Documents/agent_memory_share/reports/local/evolution-demo",
+  "kind": "scripted-demo",
+  "uses_llm": false,
+  "handoff_id": "14b6584b653141e183e22571a2b60927",
+  "sender_test_exit": 1,
+  "status": "completed",
+  "schema_version": 2,
+  "verification": {
+    "ok": true,
+    "checks": [
+      {
+        "kind": "git_revision",
+        "ok": true,
+        "expected": "85be590599291547f6553007421f17d47e569494",
+        "actual": "85be590599291547f6553007421f17d47e569494"
+      },
+      {
+        "kind": "artifact",
+        "path": "pagination.py",
+        "ok": true,
+        "expected": "0fa3e1760d9d0ec77835f378e3f585efd47f6b26562a8c4559b3cdad810e169c",
+        "actual": "0fa3e1760d9d0ec77835f378e3f585efd47f6b26562a8c4559b3cdad810e169c"
+      },
+      {
+        "kind": "artifact",
+        "path": "test_pagination.py",
+        "ok": true,
+        "expected": "d76e880a8c8a9939f4ec9c25220b9c3fe255bb9b6ee7ff7cd3f11127ca7410a5",
+        "actual": "d76e880a8c8a9939f4ec9c25220b9c3fe255bb9b6ee7ff7cd3f11127ca7410a5"
+      },
+      {
+        "kind": "artifact",
+        "path": "sender-tests.log",
+        "ok": true,
+        "expected": "d2d94688468a444ec8c063281017157dc14855474fffefa41aa0a41099456cd7",
+        "actual": "d2d94688468a444ec8c063281017157dc14855474fffefa41aa0a41099456cd7"
+      },
+      {
+        "kind": "snapshot_git",
+        "ok": true,
+        "expected": "85be590599291547f6553007421f17d47e569494",
+        "actual": "85be590599291547f6553007421f17d47e569494"
+      },
+      {
+        "kind": "snapshot_file",
+        "path": "pagination.py",
+        "ok": true,
+        "expected": {
+          "path": "pagination.py",
+          "sha256": "0fa3e1760d9d0ec77835f378e3f585efd47f6b26562a8c4559b3cdad810e169c",
+          "executable": false
+        },
+        "actual": {
+          "path": "pagination.py",
+          "sha256": "0fa3e1760d9d0ec77835f378e3f585efd47f6b26562a8c4559b3cdad810e169c",
+          "executable": false
+        }
+      },
+      {
+        "kind": "snapshot_file",
+        "path": "sender-tests.log",
+        "ok": true,
+        "expected": {
+          "path": "sender-tests.log",
+          "sha256": "d2d94688468a444ec8c063281017157dc14855474fffefa41aa0a41099456cd7",
+          "executable": false
+        },
+        "actual": {
+          "path": "sender-tests.log",
+          "sha256": "d2d94688468a444ec8c063281017157dc14855474fffefa41aa0a41099456cd7",
+          "executable": false
+        }
+      },
+      {
+        "kind": "snapshot_file",
+        "path": "test_pagination.py",
+        "ok": true,
+        "expected": {
+          "path": "test_pagination.py",
+          "sha256": "d76e880a8c8a9939f4ec9c25220b9c3fe255bb9b6ee7ff7cd3f11127ca7410a5",
+          "executable": false
+        },
+        "actual": {
+          "path": "test_pagination.py",
+          "sha256": "d76e880a8c8a9939f4ec9c25220b9c3fe255bb9b6ee7ff7cd3f11127ca7410a5",
+          "executable": false
+        }
+      }
+    ],
+    "note": "\u6587\u4ef6\u4e0e Git \u7248\u672c\u6838\u9a8c\u4e0d\u4ee3\u8868\u6d4b\u8bd5\u7ed3\u679c\u4ecd\u7136\u6709\u6548\uff1b\u8bf7\u91cd\u65b0\u8fd0\u884c\u5173\u952e\u9a8c\u8bc1\u3002",
+    "verification_id": "c4144c98a54d4075813edc6e81d1356a",
+    "handoff_id": "14b6584b653141e183e22571a2b60927",
+    "agent_id": "agent-b",
+    "workspace": "/Users/lyw/Documents/agent_memory_share/reports/local/evolution-demo/workspace",
+    "payload_digest": "6d06ee61642cdbc811992d77dd1de4f5f05de81d402d46e41315cc19179e400c",
+    "verified_at": "2026-10-04T11:24:34.575475+00:00"
+  },
+  "receiver_test_exit": 0
+}

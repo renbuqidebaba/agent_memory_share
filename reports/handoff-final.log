@@ -1,0 +1,101 @@
+test_blank_required_text_rejected (test_handoff.ApiTests.test_blank_required_text_rejected)
+API04 只有空白的任务标识、发送者、目标与状态必须拒绝。 ... ok
+test_cannot_skip_state_transitions (test_handoff.ApiTests.test_cannot_skip_state_transitions)
+API07 pending 不能直接确认或完成，claimed 不能直接完成。 ... ok
+test_designated_recipient (test_handoff.ApiTests.test_designated_recipient)
+API05 指定接收者以外的 agent 不能领取。 ... ok
+test_filter_and_query_parameter_isolation (test_handoff.ApiTests.test_filter_and_query_parameter_isolation)
+API10 任务/状态过滤准确，SQL 片段只作为普通参数处理。 ... ok
+test_http_lifecycle (test_handoff.ApiTests.test_http_lifecycle)
+API01 真实路由完整生命周期及查询。 ... ok
+test_invalid_payload_rejected_without_write (test_handoff.ApiTests.test_invalid_payload_rejected_without_write)
+API03 缺字段、空字段、错误 TTL 与枚举返回 422，数据库不变。 ... ok
+test_lease_validation (test_handoff.ApiTests.test_lease_validation)
+API09 不合法的租约长度返回 422。 ... ok
+test_missing_resource_all_routes (test_handoff.ApiTests.test_missing_resource_all_routes)
+API02 不存在的交接包在读取/领取/确认/完成时返回 404。 ... ok
+test_reject_requires_reason (test_handoff.ApiTests.test_reject_requires_reason)
+API08 退回必须填写有效原因，拒绝后仍保持 claimed。 ... ok
+test_wrong_owner_cannot_ack_or_complete (test_handoff.ApiTests.test_wrong_owner_cannot_ack_or_complete)
+API06 非领取者不能确认或完成。 ... ok
+test_absolute_path_inside_workspace_rejected (test_handoff.ArtifactTests.test_absolute_path_inside_workspace_rejected)
+AR09 交接引用必须是相对路径，即使绝对路径位于工作区内。 ... ok
+test_empty_file_is_valid (test_handoff.ArtifactTests.test_empty_file_is_valid)
+AR03 空文件可正确保存和校验摘要。 ... ok
+test_evidence_commands_are_not_executed (test_handoff.ArtifactTests.test_evidence_commands_are_not_executed)
+AR13 验证记录中的命令只作为数据保存，核验不会执行它。 ... ok
+test_git_revision_change_fails (test_handoff.ArtifactTests.test_git_revision_change_fails)
+AR12 真实 Git 仓库 HEAD 改变时核验失败。 ... ok
+test_markdown_contains_handoff_details (test_handoff.ArtifactTests.test_markdown_contains_handoff_details)
+AR14 Markdown 输出保留目标、下一步、文件与失败证据。 ... ok
+test_missing_artifact_create_fails (test_handoff.ArtifactTests.test_missing_artifact_create_fails)
+AR07 创建时引用不存在的文件必须失败。 ... ok
+test_missing_hash_fails (test_handoff.ArtifactTests.test_missing_hash_fails)
+AR04 文件存在但没有预期摘要时不能通过核验。 ... ok
+test_missing_workspace_fails (test_handoff.ArtifactTests.test_missing_workspace_fails)
+AR06 不存在的工作区返回失败，创建时明确报错。 ... ok
+test_modified_and_missing_file_fail (test_handoff.ArtifactTests.test_modified_and_missing_file_fail)
+AR02 文件修改或删除后核验失败。 ... ok
+test_no_evidence_fails (test_handoff.ArtifactTests.test_no_evidence_fails)
+AR05 没有可核验证据时不宣称通过。 ... ok
+test_parent_traversal_rejected (test_handoff.ArtifactTests.test_parent_traversal_rejected)
+AR08 父目录路径在创建和核验两端均被拒绝。 ... ok
+test_read_error_returns_failed_check (test_handoff.ArtifactTests.test_read_error_returns_failed_check)
+AR11 文件读取失败返回结构化失败项，核验流程不崩溃。 ... ok
+test_sha_matches_independent_hash (test_handoff.ArtifactTests.test_sha_matches_independent_hash)
+AR01 实际文件摘要与独立 SHA-256 计算一致。 ... ok
+test_symlink_escape_rejected (test_handoff.ArtifactTests.test_symlink_escape_rejected)
+AR10 指向工作区外部的符号链接不能作为产物。 ... ok
+test_cli_lifecycle_and_export (test_handoff.CliTests.test_cli_lifecycle_and_export)
+CLI01 独立进程执行创建/导出/领取/核验/接受/完成/查询。 ... ok
+test_invalid_json_does_not_create (test_handoff.CliTests.test_invalid_json_does_not_create)
+CLI04 非法 JSON 输入不写入交接包。 ... ok
+test_missing_resource_exit_code (test_handoff.CliTests.test_missing_resource_exit_code)
+CLI03 不存在的交接包返回退出码 1，错误写入 stderr。 ... ok
+test_reject_command (test_handoff.CliTests.test_reject_command)
+CLI05 接收者可以通过命令行退回并保留原因。 ... ok
+test_verification_failure_exit_code (test_handoff.CliTests.test_verification_failure_exit_code)
+CLI02 核验失败返回退出码 2 且输出可解析报告。 ... ok
+test_accepted_task_survives_package_ttl (test_handoff.StoreTests.test_accepted_task_survives_package_ttl)
+ST09 已接受任务不会被待领取 TTL 自动终止。 ... ok
+test_ack_conflict_still_persists_expiration (test_handoff.StoreTests.test_ack_conflict_still_persists_expiration)
+ST14 直接确认到期交接包时，拒绝请求同时持久化过期状态。 ... ok
+test_claim_conflict_still_persists_expiration (test_handoff.StoreTests.test_claim_conflict_still_persists_expiration)
+ST08 直接领取已过期包时，拒绝请求同时持久化过期状态。 ... ok
+test_claim_retry_does_not_extend_lease_or_duplicate_event (test_handoff.StoreTests.test_claim_retry_does_not_extend_lease_or_duplicate_event)
+ST03 相同接收者重试领取幂等，不延长租约或重复记事件。 ... ok
+test_claim_rolls_back_if_event_write_fails (test_handoff.StoreTests.test_claim_rolls_back_if_event_write_fails)
+ST11 事件写入失败时领取状态整体回滚。 ... ok
+test_complete_lifecycle_and_event_order (test_handoff.StoreTests.test_complete_lifecycle_and_event_order)
+ST01 创建→领取→接受→完成，状态和审计事件一致。 ... ok
+test_concurrent_claim_has_single_winner (test_handoff.StoreTests.test_concurrent_claim_has_single_winner)
+ST04 八个独立连接并发领取，只能有一个成功。 ... ok
+test_concurrent_expiration_emits_single_event (test_handoff.StoreTests.test_concurrent_expiration_emits_single_event)
+ST13 八个连接同时读取到期包，过期事件只写入一次。 ... ok
+test_create_rolls_back_if_event_write_fails (test_handoff.StoreTests.test_create_rolls_back_if_event_write_fails)
+ST10 事件写入失败时创建操作整体回滚。 ... ok
+test_expired_lease_cannot_ack (test_handoff.StoreTests.test_expired_lease_cannot_ack)
+ST06 租约到期后未经重新领取不能确认。 ... ok
+test_lease_boundary_reclaim_and_old_owner_denied (test_handoff.StoreTests.test_lease_boundary_reclaim_and_old_owner_denied)
+ST05 租约精确到期时可重领，旧接收者不能确认。 ... ok
+test_persistence_across_store_instances (test_handoff.StoreTests.test_persistence_across_store_instances)
+ST12 重新创建存储实例后，交接包仍可读取。 ... ok
+test_rejection_is_terminal (test_handoff.StoreTests.test_rejection_is_terminal)
+ST02 退回原因持久化，退回包不能继续领取或完成。 ... ok
+test_ttl_boundary_and_event_once (test_handoff.StoreTests.test_ttl_boundary_and_event_once)
+ST07 TTL 到期前可见，到期后为 expired，重复读取只记一次事件。 ... ok
+test_changed_artifact_fails_verification (test_mcp.McpTests.test_changed_artifact_fails_verification)
+MCP04 文件被改动后通过 MCP 核验返回失败。 ... ok
+test_conflict_is_tool_error_and_server_survives (test_mcp.McpTests.test_conflict_is_tool_error_and_server_survives)
+MCP03 重复竞争领取产生工具错误，服务仍可继续处理请求。 ... ok
+test_discovery_exposes_structured_schema (test_mcp.McpTests.test_discovery_exposes_structured_schema)
+MCP01 握手及工具发现成功，创建工具暴露结构化参数。 ... ok
+test_invalid_create_has_no_side_effect (test_mcp.McpTests.test_invalid_create_has_no_side_effect)
+MCP05 非法创建参数报错且不产生交接包。 ... ok
+test_stdio_complete_lifecycle (test_mcp.McpTests.test_stdio_complete_lifecycle)
+MCP02 独立 stdio 进程完整交接与查询。 ... ok
+
+----------------------------------------------------------------------
+Ran 48 tests in 11.982s
+
+OK

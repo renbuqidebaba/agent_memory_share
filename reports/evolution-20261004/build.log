@@ -1,0 +1,250 @@
+* Getting build dependencies for sdist...
+running egg_info
+writing server/agent_handoff_local.egg-info/PKG-INFO
+writing dependency_links to server/agent_handoff_local.egg-info/dependency_links.txt
+writing entry points to server/agent_handoff_local.egg-info/entry_points.txt
+writing requirements to server/agent_handoff_local.egg-info/requires.txt
+writing top-level names to server/agent_handoff_local.egg-info/top_level.txt
+reading manifest file 'server/agent_handoff_local.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+warning: no previously-included files found matching 'reports/*.json'
+warning: no previously-included files found matching 'reports/*.log'
+adding license file 'LICENSE'
+writing manifest file 'server/agent_handoff_local.egg-info/SOURCES.txt'
+* Building sdist...
+running sdist
+running egg_info
+writing server/agent_handoff_local.egg-info/PKG-INFO
+writing dependency_links to server/agent_handoff_local.egg-info/dependency_links.txt
+writing entry points to server/agent_handoff_local.egg-info/entry_points.txt
+writing requirements to server/agent_handoff_local.egg-info/requires.txt
+writing top-level names to server/agent_handoff_local.egg-info/top_level.txt
+reading manifest file 'server/agent_handoff_local.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+warning: no previously-included files found matching 'reports/*.json'
+warning: no previously-included files found matching 'reports/*.log'
+adding license file 'LICENSE'
+writing manifest file 'server/agent_handoff_local.egg-info/SOURCES.txt'
+running check
+creating agent_handoff_local-0.1.0a1
+creating agent_handoff_local-0.1.0a1/docs
+creating agent_handoff_local-0.1.0a1/examples
+creating agent_handoff_local-0.1.0a1/examples/handoffs
+creating agent_handoff_local-0.1.0a1/reports
+creating agent_handoff_local-0.1.0a1/scripts
+creating agent_handoff_local-0.1.0a1/server/agent_handoff_local.egg-info
+creating agent_handoff_local-0.1.0a1/server/app
+creating agent_handoff_local-0.1.0a1/server/app/llm
+creating agent_handoff_local-0.1.0a1/server/app/pipeline
+creating agent_handoff_local-0.1.0a1/server/app/routers
+creating agent_handoff_local-0.1.0a1/server/app/storage
+creating agent_handoff_local-0.1.0a1/tests
+copying files to agent_handoff_local-0.1.0a1...
+copying CHANGELOG.md -> agent_handoff_local-0.1.0a1
+copying CONTRIBUTING.md -> agent_handoff_local-0.1.0a1
+copying LICENSE -> agent_handoff_local-0.1.0a1
+copying MANIFEST.in -> agent_handoff_local-0.1.0a1
+copying PLAN.md -> agent_handoff_local-0.1.0a1
+copying README.en.md -> agent_handoff_local-0.1.0a1
+copying README.md -> agent_handoff_local-0.1.0a1
+copying SECURITY.md -> agent_handoff_local-0.1.0a1
+copying pyproject.toml -> agent_handoff_local-0.1.0a1
+copying uv.lock -> agent_handoff_local-0.1.0a1
+copying docs/DATA.md -> agent_handoff_local-0.1.0a1/docs
+copying docs/DEMO.md -> agent_handoff_local-0.1.0a1/docs
+copying docs/EVALUATION.md -> agent_handoff_local-0.1.0a1/docs
+copying docs/EVOLUTION.md -> agent_handoff_local-0.1.0a1/docs
+copying docs/INTEGRATIONS.md -> agent_handoff_local-0.1.0a1/docs
+copying docs/PROTOCOL.md -> agent_handoff_local-0.1.0a1/docs
+copying docs/RELEASING.md -> agent_handoff_local-0.1.0a1/docs
+copying docs/USE_CASES.md -> agent_handoff_local-0.1.0a1/docs
+copying docs/handoff.schema.json -> agent_handoff_local-0.1.0a1/docs
+copying examples/agent-instructions.md -> agent_handoff_local-0.1.0a1/examples
+copying examples/codex-mcp.toml -> agent_handoff_local-0.1.0a1/examples
+copying examples/evaluation-run.json -> agent_handoff_local-0.1.0a1/examples
+copying examples/handoff.json -> agent_handoff_local-0.1.0a1/examples
+copying examples/handoffs/verification.json -> agent_handoff_local-0.1.0a1/examples/handoffs
+copying reports/OPEN_SOURCE_READINESS.md -> agent_handoff_local-0.1.0a1/reports
+copying scripts/check_wheel.py -> agent_handoff_local-0.1.0a1/scripts
+copying scripts/demo_handoff.py -> agent_handoff_local-0.1.0a1/scripts
+copying scripts/handoff_test.py -> agent_handoff_local-0.1.0a1/scripts
+copying scripts/mcp_test.py -> agent_handoff_local-0.1.0a1/scripts
+copying scripts/prepare_evaluation.py -> agent_handoff_local-0.1.0a1/scripts
+copying scripts/run_handoff_tests.py -> agent_handoff_local-0.1.0a1/scripts
+copying scripts/smoke_test.py -> agent_handoff_local-0.1.0a1/scripts
+copying scripts/summarize_evaluation.py -> agent_handoff_local-0.1.0a1/scripts
+copying server/agent_handoff_local.egg-info/PKG-INFO -> agent_handoff_local-0.1.0a1/server/agent_handoff_local.egg-info
+copying server/agent_handoff_local.egg-info/SOURCES.txt -> agent_handoff_local-0.1.0a1/server/agent_handoff_local.egg-info
+copying server/agent_handoff_local.egg-info/dependency_links.txt -> agent_handoff_local-0.1.0a1/server/agent_handoff_local.egg-info
+copying server/agent_handoff_local.egg-info/entry_points.txt -> agent_handoff_local-0.1.0a1/server/agent_handoff_local.egg-info
+copying server/agent_handoff_local.egg-info/requires.txt -> agent_handoff_local-0.1.0a1/server/agent_handoff_local.egg-info
+copying server/agent_handoff_local.egg-info/top_level.txt -> agent_handoff_local-0.1.0a1/server/agent_handoff_local.egg-info
+copying server/app/__init__.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/check_runner.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/config.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/db.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/events.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/handoff_artifacts.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/handoff_cli.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/handoff_mcp.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/main.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/maintenance.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/models.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/workspace_capture.py -> agent_handoff_local-0.1.0a1/server/app
+copying server/app/llm/__init__.py -> agent_handoff_local-0.1.0a1/server/app/llm
+copying server/app/llm/base.py -> agent_handoff_local-0.1.0a1/server/app/llm
+copying server/app/llm/fake.py -> agent_handoff_local-0.1.0a1/server/app/llm
+copying server/app/llm/openai_compat.py -> agent_handoff_local-0.1.0a1/server/app/llm
+copying server/app/pipeline/__init__.py -> agent_handoff_local-0.1.0a1/server/app/pipeline
+copying server/app/pipeline/summarize.py -> agent_handoff_local-0.1.0a1/server/app/pipeline
+copying server/app/routers/__init__.py -> agent_handoff_local-0.1.0a1/server/app/routers
+copying server/app/routers/handoff.py -> agent_handoff_local-0.1.0a1/server/app/routers
+copying server/app/routers/memory.py -> agent_handoff_local-0.1.0a1/server/app/routers
+copying server/app/routers/messages.py -> agent_handoff_local-0.1.0a1/server/app/routers
+copying server/app/routers/summary.py -> agent_handoff_local-0.1.0a1/server/app/routers
+copying server/app/storage/base.py -> agent_handoff_local-0.1.0a1/server/app/storage
+copying server/app/storage/handoff_store.py -> agent_handoff_local-0.1.0a1/server/app/storage
+copying server/app/storage/sqlite_store.py -> agent_handoff_local-0.1.0a1/server/app/storage
+copying tests/test_evidence.py -> agent_handoff_local-0.1.0a1/tests
+copying tests/test_handoff.py -> agent_handoff_local-0.1.0a1/tests
+copying tests/test_mcp.py -> agent_handoff_local-0.1.0a1/tests
+copying tests/test_release.py -> agent_handoff_local-0.1.0a1/tests
+copying tests/test_scripts.py -> agent_handoff_local-0.1.0a1/tests
+Writing agent_handoff_local-0.1.0a1/setup.cfg
+Creating tar archive
+removing 'agent_handoff_local-0.1.0a1' (and everything under it)
+* Building wheel from sdist
+* Getting build dependencies for wheel...
+running egg_info
+writing server/agent_handoff_local.egg-info/PKG-INFO
+writing dependency_links to server/agent_handoff_local.egg-info/dependency_links.txt
+writing entry points to server/agent_handoff_local.egg-info/entry_points.txt
+writing requirements to server/agent_handoff_local.egg-info/requires.txt
+writing top-level names to server/agent_handoff_local.egg-info/top_level.txt
+reading manifest file 'server/agent_handoff_local.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+warning: no previously-included files found matching 'reports/*.json'
+warning: no previously-included files found matching 'reports/*.log'
+adding license file 'LICENSE'
+writing manifest file 'server/agent_handoff_local.egg-info/SOURCES.txt'
+* Building wheel...
+running bdist_wheel
+running build
+running build_py
+creating build/lib/app
+copying server/app/db.py -> build/lib/app
+copying server/app/config.py -> build/lib/app
+copying server/app/handoff_artifacts.py -> build/lib/app
+copying server/app/models.py -> build/lib/app
+copying server/app/maintenance.py -> build/lib/app
+copying server/app/events.py -> build/lib/app
+copying server/app/handoff_mcp.py -> build/lib/app
+copying server/app/handoff_cli.py -> build/lib/app
+copying server/app/__init__.py -> build/lib/app
+copying server/app/check_runner.py -> build/lib/app
+copying server/app/workspace_capture.py -> build/lib/app
+copying server/app/main.py -> build/lib/app
+creating build/lib/app/routers
+copying server/app/routers/memory.py -> build/lib/app/routers
+copying server/app/routers/handoff.py -> build/lib/app/routers
+copying server/app/routers/__init__.py -> build/lib/app/routers
+copying server/app/routers/summary.py -> build/lib/app/routers
+copying server/app/routers/messages.py -> build/lib/app/routers
+creating build/lib/app/pipeline
+copying server/app/pipeline/__init__.py -> build/lib/app/pipeline
+copying server/app/pipeline/summarize.py -> build/lib/app/pipeline
+creating build/lib/app/llm
+copying server/app/llm/fake.py -> build/lib/app/llm
+copying server/app/llm/__init__.py -> build/lib/app/llm
+copying server/app/llm/openai_compat.py -> build/lib/app/llm
+copying server/app/llm/base.py -> build/lib/app/llm
+creating build/lib/app/storage
+copying server/app/storage/sqlite_store.py -> build/lib/app/storage
+copying server/app/storage/handoff_store.py -> build/lib/app/storage
+copying server/app/storage/base.py -> build/lib/app/storage
+running egg_info
+writing server/agent_handoff_local.egg-info/PKG-INFO
+writing dependency_links to server/agent_handoff_local.egg-info/dependency_links.txt
+writing entry points to server/agent_handoff_local.egg-info/entry_points.txt
+writing requirements to server/agent_handoff_local.egg-info/requires.txt
+writing top-level names to server/agent_handoff_local.egg-info/top_level.txt
+reading manifest file 'server/agent_handoff_local.egg-info/SOURCES.txt'
+reading manifest template 'MANIFEST.in'
+warning: no previously-included files found matching 'reports/*.json'
+warning: no previously-included files found matching 'reports/*.log'
+adding license file 'LICENSE'
+writing manifest file 'server/agent_handoff_local.egg-info/SOURCES.txt'
+installing to build/bdist.macosx-10.15-x86_64/wheel
+running install
+running install_lib
+creating build/bdist.macosx-10.15-x86_64/wheel
+creating build/bdist.macosx-10.15-x86_64/wheel/app
+creating build/bdist.macosx-10.15-x86_64/wheel/app/routers
+copying build/lib/app/routers/memory.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/routers
+copying build/lib/app/routers/handoff.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/routers
+copying build/lib/app/routers/__init__.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/routers
+copying build/lib/app/routers/summary.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/routers
+copying build/lib/app/routers/messages.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/routers
+creating build/bdist.macosx-10.15-x86_64/wheel/app/pipeline
+copying build/lib/app/pipeline/__init__.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/pipeline
+copying build/lib/app/pipeline/summarize.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/pipeline
+copying build/lib/app/db.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+creating build/bdist.macosx-10.15-x86_64/wheel/app/llm
+copying build/lib/app/llm/fake.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/llm
+copying build/lib/app/llm/__init__.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/llm
+copying build/lib/app/llm/openai_compat.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/llm
+copying build/lib/app/llm/base.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/llm
+copying build/lib/app/config.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+copying build/lib/app/handoff_artifacts.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+copying build/lib/app/models.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+copying build/lib/app/maintenance.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+copying build/lib/app/events.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+copying build/lib/app/handoff_mcp.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+copying build/lib/app/handoff_cli.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+copying build/lib/app/__init__.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+copying build/lib/app/check_runner.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+creating build/bdist.macosx-10.15-x86_64/wheel/app/storage
+copying build/lib/app/storage/sqlite_store.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/storage
+copying build/lib/app/storage/handoff_store.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/storage
+copying build/lib/app/storage/base.py -> build/bdist.macosx-10.15-x86_64/wheel/./app/storage
+copying build/lib/app/workspace_capture.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+copying build/lib/app/main.py -> build/bdist.macosx-10.15-x86_64/wheel/./app
+running install_egg_info
+Copying server/agent_handoff_local.egg-info to build/bdist.macosx-10.15-x86_64/wheel/./agent_handoff_local-0.1.0a1-py3.12.egg-info
+running install_scripts
+creating build/bdist.macosx-10.15-x86_64/wheel/agent_handoff_local-0.1.0a1.dist-info/WHEEL
+creating '/Users/lyw/Documents/agent_memory_share/reports/local/evolution-dist/.tmp-zcybg0t4/agent_handoff_local-0.1.0a1-py3-none-any.whl' and adding 'build/bdist.macosx-10.15-x86_64/wheel' to it
+adding 'agent_handoff_local-0.1.0a1.dist-info/licenses/LICENSE'
+adding 'app/__init__.py'
+adding 'app/check_runner.py'
+adding 'app/config.py'
+adding 'app/db.py'
+adding 'app/events.py'
+adding 'app/handoff_artifacts.py'
+adding 'app/handoff_cli.py'
+adding 'app/handoff_mcp.py'
+adding 'app/main.py'
+adding 'app/maintenance.py'
+adding 'app/models.py'
+adding 'app/workspace_capture.py'
+adding 'app/llm/__init__.py'
+adding 'app/llm/base.py'
+adding 'app/llm/fake.py'
+adding 'app/llm/openai_compat.py'
+adding 'app/pipeline/__init__.py'
+adding 'app/pipeline/summarize.py'
+adding 'app/routers/__init__.py'
+adding 'app/routers/handoff.py'
+adding 'app/routers/memory.py'
+adding 'app/routers/messages.py'
+adding 'app/routers/summary.py'
+adding 'app/storage/base.py'
+adding 'app/storage/handoff_store.py'
+adding 'app/storage/sqlite_store.py'
+adding 'agent_handoff_local-0.1.0a1.dist-info/METADATA'
+adding 'agent_handoff_local-0.1.0a1.dist-info/WHEEL'
+adding 'agent_handoff_local-0.1.0a1.dist-info/entry_points.txt'
+adding 'agent_handoff_local-0.1.0a1.dist-info/top_level.txt'
+adding 'agent_handoff_local-0.1.0a1.dist-info/RECORD'
+removing build/bdist.macosx-10.15-x86_64/wheel
+Successfully built agent_handoff_local-0.1.0a1.tar.gz and agent_handoff_local-0.1.0a1-py3-none-any.whl

@@ -1,0 +1,33 @@
+name: Feature request / 功能建议
+description: Explain a local agent handoff problem and a concrete improvement.
+title: "[Feature] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The current focus is verifiable task handoff between agents sharing a local workspace.
+        中文或英文均可。Please avoid including confidential task content.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and workflow / 问题与使用场景
+      description: Who encounters this problem, when does it happen, and how do you work around it today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior / 建议行为
+      description: Give a concrete before/after example if possible.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and tradeoffs / 替代方案与取舍
+      description: Include compatibility or data-format changes if known.
+  - type: textarea
+    id: validation
+    attributes:
+      label: How to verify improvement / 如何验证效果
+      description: What observable result would show that the feature helps?

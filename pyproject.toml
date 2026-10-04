@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=77.0.3,<85"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "agent-handoff-local"
+version = "0.1.0a1"
+description = "Local task handoff packages for AI agents"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = ["agents", "handoff", "mcp", "local-first"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Programming Language :: Python :: 3",
+    "Topic :: Software Development",
+]
+requires-python = ">=3.10"
+dependencies = ["fastapi>=0.115,<1", "uvicorn>=0.30,<1", "pydantic>=2.7,<3"]
+
+[project.optional-dependencies]
+mcp = [
+    "mcp>=2.3,<3",
+    # 49 falls back to a source build on Intel macOS; 48 supplies a universal wheel.
+    "cryptography>=48,<49; sys_platform == 'darwin' and platform_machine == 'x86_64'",
+]
+test = ["httpx>=0.27,<1"]
+dev = ["build>=1.2,<2", "twine>=6,<7", "ruff>=0.9,<1", "setuptools>=77.0.3,<85"]
+
+[project.scripts]
+agent-handoff = "app.handoff_cli:main"
+agent-handoff-mcp = "app.handoff_mcp:main"
+
+[tool.setuptools]
+package-dir = {"" = "server"}
+
+[tool.setuptools.packages.find]
+where = ["server"]
+
+[tool.ruff.lint]
+select = ["E9", "F63", "F7", "F82"]

@@ -1,0 +1,109 @@
+Tool 'handoff_claim' raised an unexpected exception
+Traceback (most recent call last):
+  File "/private/tmp/agent_handoff_mcp_deps/mcp/server/mcpserver/tools/base.py", line 179, in run
+    result = await self.fn_metadata.call_fn(self.fn, self.is_async, validated, pass_directly)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/agent_handoff_mcp_deps/mcp/server/mcpserver/utilities/func_metadata.py", line 164, in call_fn
+    return await anyio.to_thread.run_sync(functools.partial(fn, **kwargs))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/agent_handoff_mcp_deps/anyio/to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/private/tmp/agent_handoff_mcp_deps/anyio/_backends/_asyncio.py", line 2706, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/private/tmp/agent_handoff_mcp_deps/anyio/_backends/_asyncio.py", line 1100, in run
+    result = context.run(func, *args)
+  File "/Users/lyw/Documents/agent_memory_share/server/app/handoff_mcp.py", line 38, in handoff_claim
+    return store.claim(handoff_id, agent_id)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/lyw/Documents/agent_memory_share/server/app/storage/handoff_store.py", line 117, in claim
+    raise HandoffConflict(f"交接包当前状态为 {row['status']}，不可领取")
+app.storage.handoff_store.HandoffConflict: 交接包当前状态为 claimed，不可领取
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/private/tmp/agent_handoff_mcp_deps/mcp/server/mcpserver/server.py", line 442, in _handle_call_tool
+    return await self.call_tool(params.name, params.arguments or {}, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/agent_handoff_mcp_deps/mcp/server/mcpserver/server.py", line 548, in call_tool
+    return await self._tool_manager.call_tool(name, arguments, context, convert_result=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/agent_handoff_mcp_deps/mcp/server/mcpserver/tools/tool_manager.py", line 87, in call_tool
+    return await tool.run(arguments, context, convert_result=convert_result)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/private/tmp/agent_handoff_mcp_deps/mcp/server/mcpserver/tools/base.py", line 213, in run
+    raise UnexpectedToolError(f"Error executing tool {self.name}") from exc
+mcp.server.mcpserver.exceptions.UnexpectedToolError: Error executing tool handoff_claim
+Tool 'handoff_create' rejected arguments: ['payload.from_agent', 'payload.goal', 'payload.status_summary', 'payload.task_id']
+{"timestamp_utc": "2026-10-03T16:31:14.992798+00:00", "sqlite": "3.50.4", "duration_seconds": 12.266, "tests_run": 46, "passed": 42, "failed_cases": 4, "skipped": 0, "successful": false}
+API04 只有空白的任务标识、发送者、目标与状态必须拒绝。 
+ test_blank_required_text_rejected (test_handoff.ApiTests.test_blank_required_text_rejected) (field='task_id'): Traceback (most recent call last):
+  File "/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py", line 212, in test_blank_required_text_rejected
+    self.assertEqual(self.client.post("/v1/handoffs", json={**BASE, field: "  \n"}).status_code, 422)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 200 != 422
+
+test_blank_required_text_rejected (test_handoff.ApiTests.test_blank_required_text_rejected) (field='from_agent'): Traceback (most recent call last):
+  File "/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py", line 212, in test_blank_required_text_rejected
+    self.assertEqual(self.client.post("/v1/handoffs", json={**BASE, field: "  \n"}).status_code, 422)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 200 != 422
+
+test_blank_required_text_rejected (test_handoff.ApiTests.test_blank_required_text_rejected) (field='goal'): Traceback (most recent call last):
+  File "/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py", line 212, in test_blank_required_text_rejected
+    self.assertEqual(self.client.post("/v1/handoffs", json={**BASE, field: "  \n"}).status_code, 422)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 200 != 422
+
+test_blank_required_text_rejected (test_handoff.ApiTests.test_blank_required_text_rejected) (field='status_summary'): Traceback (most recent call last):
+  File "/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py", line 212, in test_blank_required_text_rejected
+    self.assertEqual(self.client.post("/v1/handoffs", json={**BASE, field: "  \n"}).status_code, 422)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 200 != 422
+
+test_blank_required_text_rejected (test_handoff.ApiTests.test_blank_required_text_rejected) (field='to_agent'): Traceback (most recent call last):
+  File "/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py", line 212, in test_blank_required_text_rejected
+    self.assertEqual(self.client.post("/v1/handoffs", json={**BASE, field: "  \n"}).status_code, 422)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 200 != 422
+
+AR09 交接引用必须是相对路径，即使绝对路径位于工作区内。 
+ Traceback (most recent call last):
+  File "/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py", line 322, in test_absolute_path_inside_workspace_rejected
+    with self.assertRaises(ValueError):
+         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+AR11 文件读取失败返回结构化失败项，核验流程不崩溃。 
+ Traceback (most recent call last):
+  File "/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py", line 337, in test_read_error_returns_failed_check
+    result = verify_handoff(h, self.workspace)
+  File "/Users/lyw/Documents/agent_memory_share/server/app/handoff_artifacts.py", line 63, in verify_handoff
+    actual = _sha256(path) if path.is_file() else None
+             ~~~~~~~^^^^^^
+  File "/Users/lyw/.workbuddy/binaries/python/versions/3.13.12/lib/python3.13/unittest/mock.py", line 1169, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/lyw/.workbuddy/binaries/python/versions/3.13.12/lib/python3.13/unittest/mock.py", line 1173, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/Users/lyw/.workbuddy/binaries/python/versions/3.13.12/lib/python3.13/unittest/mock.py", line 1228, in _execute_mock_call
+    raise effect
+PermissionError: permission denied
+
+ST08 直接领取已过期包时，拒绝请求同时持久化过期状态。 
+ Traceback (most recent call last):
+  File "/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py", line 140, in test_claim_conflict_still_persists_expiration
+    self.assertEqual(self.raw_status(hid), "expired")
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'pending' != 'expired'
+- pending
++ expired
+
+

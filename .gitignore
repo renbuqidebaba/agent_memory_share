@@ -6,6 +6,21 @@ __pycache__/
 *.pyc
 *.pyo
 .venv/
+*.egg-info/
+build/
+dist/
+.ruff_cache/
+.pytest_cache/
+.coverage
+.env
+.env.*
+!.env.example
+*.db
+*.db-wal
+*.db-shm
+*.sqlite*
+demo-output/
+reports/local/
 
 # 系统文件
 .DS_Store

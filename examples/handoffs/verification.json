@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "task_id": "handoff-verification-example",
+  "from_agent": "implementation-agent",
+  "to_agent": "verification-agent",
+  "goal": "独立检查本地任务交接的状态流转与文件核验，并留下可复查的结论",
+  "status_summary": "示例审查任务：实现文件已存在，本次交接尚未运行验证。请按真实改动调整目标和文件列表。",
+  "done_when": [
+    "确认所审代码与交接创建时的文件和 Git 版本一致",
+    "运行适用的回归检查，并如实记录通过、失败或未运行",
+    "给出包含文件位置、复现步骤与影响范围的结论；没有发现问题时也说明检查范围"
+  ],
+  "completed": [],
+  "decisions": [
+    "本次交接的任务是独立复验；发现缺陷先记录，不直接替发送方宣称修复完成"
+  ],
+  "next_steps": [
+    "领取交接并核验工作区",
+    "阅读状态流转、文件核验与相应测试",
+    "自行运行适用的回归检查并记录结论"
+  ],
+  "open_questions": [
+    "是否存在测试未覆盖的状态边界或错误处理路径？"
+  ],
+  "artifacts": [
+    {"path": "server/app/storage/handoff_store.py", "note": "状态流转与事件事务"},
+    {"path": "server/app/handoff_artifacts.py", "note": "Git 与文件证据核验"},
+    {"path": "tests/test_handoff.py", "note": "现有回归检查"}
+  ],
+  "validation": [
+    {
+      "command": "python scripts/run_handoff_tests.py --require-mcp --output reports/local/verification.json",
+      "outcome": "not_run",
+      "detail": "需安装 .[test,mcp]；由接收方检查命令后自行运行。模板不包含测试通过声明。"
+    }
+  ],
+  "ttl_seconds": 86400
+}

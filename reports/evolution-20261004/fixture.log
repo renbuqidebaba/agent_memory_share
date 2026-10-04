@@ -1,0 +1,9 @@
+{
+  "output": "/Users/lyw/Documents/agent_memory_share/reports/local/evolution-fixture",
+  "kind": "scripted-demo",
+  "uses_llm": false,
+  "handoff_id": "81c1e15a7473445780c6515626e444d1",
+  "sender_test_exit": 1,
+  "status": "pending",
+  "schema_version": 2
+}

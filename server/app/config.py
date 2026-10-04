@@ -3,8 +3,11 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-DATA_DIR = Path(os.environ.get("MEMORY_DATA_DIR", BASE_DIR / "data"))
-DB_PATH = Path(os.environ.get("MEMORY_DB_PATH", DATA_DIR / "memory.db"))
+# 安装后 site-packages 通常不可写，默认使用用户数据目录。
+USER_DATA_DIR = Path(os.environ.get("XDG_DATA_HOME", Path.home() / ".local" / "share")) / "agent-handoff"
+DATA_DIR = Path(os.environ.get("HANDOFF_DATA_DIR", os.environ.get("MEMORY_DATA_DIR", USER_DATA_DIR))).expanduser()
+# Keep the existing filename and legacy variables so upgrades find existing data.
+DB_PATH = Path(os.environ.get("HANDOFF_DB_PATH", os.environ.get("MEMORY_DB_PATH", DATA_DIR / "memory.db"))).expanduser()
 
 # LLM provider：fake（内置规则模型，测试/演示用，零成本）| openai 兼容接口 | 不配置则总结管道跳过
 LLM_PROVIDER = os.environ.get("MEMORY_LLM_PROVIDER", "")  # fake / openai / 空

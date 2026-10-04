@@ -1,0 +1,4 @@
+$ /Users/lyw/.local/bin/uv pip check --python .venv/bin/python
+Checked 57 packages in 4ms
+All installed packages are compatible
+Exit code: 0

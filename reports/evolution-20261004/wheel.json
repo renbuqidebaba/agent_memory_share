@@ -1,0 +1,9 @@
+{
+  "successful": false,
+  "wheels": [
+    {
+      "successful": false,
+      "error": "Command '['/private/var/folders/bt/z4h84ls13jd_9_733kwp24b80000gn/T/handoff_wheel_l9deosjy/venv/bin/python', '-I', '-m', 'pip', '--isolated', '--disable-pip-version-check', 'install', '--constraint', '/Users/lyw/Documents/agent_memory_share/reports/local/locked-requirements.txt', '/Users/lyw/Documents/agent_memory_share/reports/local/evolution-dist/agent_handoff_local-0.1.0a1-py3-none-any.whl[mcp]']' returned non-zero exit status 1."
+    }
+  ]
+}

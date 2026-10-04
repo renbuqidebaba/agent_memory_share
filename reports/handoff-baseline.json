@@ -1,0 +1,355 @@
+{
+  "timestamp_utc": "2026-10-03T16:31:14.992798+00:00",
+  "python": "3.13.12 (main, Feb  4 2026, 00:40:20) [Clang 21.1.4 ]",
+  "platform": "macOS-14.2.1-x86_64-i386-64bit-Mach-O",
+  "sqlite": "3.50.4",
+  "dependencies": {
+    "fastapi": "0.142.2",
+    "pydantic": "2.13.5",
+    "httpx": "0.28.1",
+    "httpx2": "2.13.1",
+    "mcp": "2.3.0"
+  },
+  "duration_seconds": 12.266,
+  "tests_run": 46,
+  "passed": 42,
+  "failed_cases": 4,
+  "skipped": 0,
+  "successful": false,
+  "cases": [
+    {
+      "id": "test_handoff.ApiTests.test_blank_required_text_rejected",
+      "description": "API04 只有空白的任务标识、发送者、目标与状态必须拒绝。",
+      "status": "failed",
+      "seconds": 0.0838,
+      "details": [
+        "test_blank_required_text_rejected (test_handoff.ApiTests.test_blank_required_text_rejected) (field='task_id'): Traceback (most recent call last):\n  File \"/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py\", line 212, in test_blank_required_text_rejected\n    self.assertEqual(self.client.post(\"/v1/handoffs\", json={**BASE, field: \"  \\n\"}).status_code, 422)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 200 != 422\n",
+        "test_blank_required_text_rejected (test_handoff.ApiTests.test_blank_required_text_rejected) (field='from_agent'): Traceback (most recent call last):\n  File \"/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py\", line 212, in test_blank_required_text_rejected\n    self.assertEqual(self.client.post(\"/v1/handoffs\", json={**BASE, field: \"  \\n\"}).status_code, 422)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 200 != 422\n",
+        "test_blank_required_text_rejected (test_handoff.ApiTests.test_blank_required_text_rejected) (field='goal'): Traceback (most recent call last):\n  File \"/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py\", line 212, in test_blank_required_text_rejected\n    self.assertEqual(self.client.post(\"/v1/handoffs\", json={**BASE, field: \"  \\n\"}).status_code, 422)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 200 != 422\n",
+        "test_blank_required_text_rejected (test_handoff.ApiTests.test_blank_required_text_rejected) (field='status_summary'): Traceback (most recent call last):\n  File \"/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py\", line 212, in test_blank_required_text_rejected\n    self.assertEqual(self.client.post(\"/v1/handoffs\", json={**BASE, field: \"  \\n\"}).status_code, 422)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 200 != 422\n",
+        "test_blank_required_text_rejected (test_handoff.ApiTests.test_blank_required_text_rejected) (field='to_agent'): Traceback (most recent call last):\n  File \"/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py\", line 212, in test_blank_required_text_rejected\n    self.assertEqual(self.client.post(\"/v1/handoffs\", json={**BASE, field: \"  \\n\"}).status_code, 422)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 200 != 422\n"
+      ]
+    },
+    {
+      "id": "test_handoff.ApiTests.test_cannot_skip_state_transitions",
+      "description": "API07 pending 不能直接确认或完成，claimed 不能直接完成。",
+      "status": "passed",
+      "seconds": 0.0325,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ApiTests.test_designated_recipient",
+      "description": "API05 指定接收者以外的 agent 不能领取。",
+      "status": "passed",
+      "seconds": 0.0242,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ApiTests.test_filter_and_query_parameter_isolation",
+      "description": "API10 任务/状态过滤准确，SQL 片段只作为普通参数处理。",
+      "status": "passed",
+      "seconds": 0.0285,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ApiTests.test_http_lifecycle",
+      "description": "API01 真实路由完整生命周期及查询。",
+      "status": "passed",
+      "seconds": 0.03,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ApiTests.test_invalid_payload_rejected_without_write",
+      "description": "API03 缺字段、空字段、错误 TTL 与枚举返回 422，数据库不变。",
+      "status": "passed",
+      "seconds": 0.0184,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ApiTests.test_lease_validation",
+      "description": "API09 不合法的租约长度返回 422。",
+      "status": "passed",
+      "seconds": 0.0167,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ApiTests.test_missing_resource_all_routes",
+      "description": "API02 不存在的交接包在读取/领取/确认/完成时返回 404。",
+      "status": "passed",
+      "seconds": 0.0229,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ApiTests.test_reject_requires_reason",
+      "description": "API08 退回必须填写有效原因，拒绝后仍保持 claimed。",
+      "status": "passed",
+      "seconds": 0.0212,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ApiTests.test_wrong_owner_cannot_ack_or_complete",
+      "description": "API06 非领取者不能确认或完成。",
+      "status": "passed",
+      "seconds": 0.0246,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_absolute_path_inside_workspace_rejected",
+      "description": "AR09 交接引用必须是相对路径，即使绝对路径位于工作区内。",
+      "status": "failed",
+      "seconds": 0.0351,
+      "details": [
+        "Traceback (most recent call last):\n  File \"/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py\", line 322, in test_absolute_path_inside_workspace_rejected\n    with self.assertRaises(ValueError):\n         ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^\nAssertionError: ValueError not raised\n"
+      ]
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_empty_file_is_valid",
+      "description": "AR03 空文件可正确保存和校验摘要。",
+      "status": "passed",
+      "seconds": 0.0349,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_evidence_commands_are_not_executed",
+      "description": "AR13 验证记录中的命令只作为数据保存，核验不会执行它。",
+      "status": "passed",
+      "seconds": 0.0358,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_git_revision_change_fails",
+      "description": "AR12 真实 Git 仓库 HEAD 改变时核验失败。",
+      "status": "passed",
+      "seconds": 0.2861,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_markdown_contains_handoff_details",
+      "description": "AR14 Markdown 输出保留目标、下一步、文件与失败证据。",
+      "status": "passed",
+      "seconds": 0.0175,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_missing_artifact_create_fails",
+      "description": "AR07 创建时引用不存在的文件必须失败。",
+      "status": "passed",
+      "seconds": 0.0125,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_missing_hash_fails",
+      "description": "AR04 文件存在但没有预期摘要时不能通过核验。",
+      "status": "passed",
+      "seconds": 0.041,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_missing_workspace_fails",
+      "description": "AR06 不存在的工作区返回失败，创建时明确报错。",
+      "status": "passed",
+      "seconds": 0.0364,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_modified_and_missing_file_fail",
+      "description": "AR02 文件修改或删除后核验失败。",
+      "status": "passed",
+      "seconds": 0.0383,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_no_evidence_fails",
+      "description": "AR05 没有可核验证据时不宣称通过。",
+      "status": "passed",
+      "seconds": 0.0093,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_parent_traversal_rejected",
+      "description": "AR08 父目录路径在创建和核验两端均被拒绝。",
+      "status": "passed",
+      "seconds": 0.0092,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_read_error_returns_failed_check",
+      "description": "AR11 文件读取失败返回结构化失败项，核验流程不崩溃。",
+      "status": "error",
+      "seconds": 0.0377,
+      "details": [
+        "Traceback (most recent call last):\n  File \"/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py\", line 337, in test_read_error_returns_failed_check\n    result = verify_handoff(h, self.workspace)\n  File \"/Users/lyw/Documents/agent_memory_share/server/app/handoff_artifacts.py\", line 63, in verify_handoff\n    actual = _sha256(path) if path.is_file() else None\n             ~~~~~~~^^^^^^\n  File \"/Users/lyw/.workbuddy/binaries/python/versions/3.13.12/lib/python3.13/unittest/mock.py\", line 1169, in __call__\n    return self._mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/Users/lyw/.workbuddy/binaries/python/versions/3.13.12/lib/python3.13/unittest/mock.py\", line 1173, in _mock_call\n    return self._execute_mock_call(*args, **kwargs)\n           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^\n  File \"/Users/lyw/.workbuddy/binaries/python/versions/3.13.12/lib/python3.13/unittest/mock.py\", line 1228, in _execute_mock_call\n    raise effect\nPermissionError: permission denied\n"
+      ]
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_sha_matches_independent_hash",
+      "description": "AR01 实际文件摘要与独立 SHA-256 计算一致。",
+      "status": "passed",
+      "seconds": 0.0375,
+      "details": []
+    },
+    {
+      "id": "test_handoff.ArtifactTests.test_symlink_escape_rejected",
+      "description": "AR10 指向工作区外部的符号链接不能作为产物。",
+      "status": "passed",
+      "seconds": 0.0113,
+      "details": []
+    },
+    {
+      "id": "test_handoff.CliTests.test_cli_lifecycle_and_export",
+      "description": "CLI01 独立进程执行创建/导出/领取/核验/接受/完成/查询。",
+      "status": "passed",
+      "seconds": 1.9999,
+      "details": []
+    },
+    {
+      "id": "test_handoff.CliTests.test_invalid_json_does_not_create",
+      "description": "CLI04 非法 JSON 输入不写入交接包。",
+      "status": "passed",
+      "seconds": 0.3526,
+      "details": []
+    },
+    {
+      "id": "test_handoff.CliTests.test_missing_resource_exit_code",
+      "description": "CLI03 不存在的交接包返回退出码 1，错误写入 stderr。",
+      "status": "passed",
+      "seconds": 0.3339,
+      "details": []
+    },
+    {
+      "id": "test_handoff.CliTests.test_reject_command",
+      "description": "CLI05 接收者可以通过命令行退回并保留原因。",
+      "status": "passed",
+      "seconds": 0.3033,
+      "details": []
+    },
+    {
+      "id": "test_handoff.CliTests.test_verification_failure_exit_code",
+      "description": "CLI02 核验失败返回退出码 2 且输出可解析报告。",
+      "status": "passed",
+      "seconds": 0.2965,
+      "details": []
+    },
+    {
+      "id": "test_handoff.StoreTests.test_accepted_task_survives_package_ttl",
+      "description": "ST09 已接受任务不会被待领取 TTL 自动终止。",
+      "status": "passed",
+      "seconds": 0.0188,
+      "details": []
+    },
+    {
+      "id": "test_handoff.StoreTests.test_claim_conflict_still_persists_expiration",
+      "description": "ST08 直接领取已过期包时，拒绝请求同时持久化过期状态。",
+      "status": "failed",
+      "seconds": 0.0146,
+      "details": [
+        "Traceback (most recent call last):\n  File \"/Users/lyw/Documents/agent_memory_share/tests/test_handoff.py\", line 140, in test_claim_conflict_still_persists_expiration\n    self.assertEqual(self.raw_status(hid), \"expired\")\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 'pending' != 'expired'\n- pending\n+ expired\n\n"
+      ]
+    },
+    {
+      "id": "test_handoff.StoreTests.test_claim_retry_does_not_extend_lease_or_duplicate_event",
+      "description": "ST03 相同接收者重试领取幂等，不延长租约或重复记事件。",
+      "status": "passed",
+      "seconds": 0.0146,
+      "details": []
+    },
+    {
+      "id": "test_handoff.StoreTests.test_claim_rolls_back_if_event_write_fails",
+      "description": "ST11 事件写入失败时领取状态整体回滚。",
+      "status": "passed",
+      "seconds": 0.0137,
+      "details": []
+    },
+    {
+      "id": "test_handoff.StoreTests.test_complete_lifecycle_and_event_order",
+      "description": "ST01 创建→领取→接受→完成，状态和审计事件一致。",
+      "status": "passed",
+      "seconds": 0.0165,
+      "details": []
+    },
+    {
+      "id": "test_handoff.StoreTests.test_concurrent_claim_has_single_winner",
+      "description": "ST04 八个独立连接并发领取，只能有一个成功。",
+      "status": "passed",
+      "seconds": 0.0306,
+      "details": []
+    },
+    {
+      "id": "test_handoff.StoreTests.test_create_rolls_back_if_event_write_fails",
+      "description": "ST10 事件写入失败时创建操作整体回滚。",
+      "status": "passed",
+      "seconds": 0.0097,
+      "details": []
+    },
+    {
+      "id": "test_handoff.StoreTests.test_expired_lease_cannot_ack",
+      "description": "ST06 租约到期后未经重新领取不能确认。",
+      "status": "passed",
+      "seconds": 0.0131,
+      "details": []
+    },
+    {
+      "id": "test_handoff.StoreTests.test_lease_boundary_reclaim_and_old_owner_denied",
+      "description": "ST05 租约精确到期时可重领，旧接收者不能确认。",
+      "status": "passed",
+      "seconds": 0.0153,
+      "details": []
+    },
+    {
+      "id": "test_handoff.StoreTests.test_persistence_across_store_instances",
+      "description": "ST12 重新创建存储实例后，交接包仍可读取。",
+      "status": "passed",
+      "seconds": 0.0133,
+      "details": []
+    },
+    {
+      "id": "test_handoff.StoreTests.test_rejection_is_terminal",
+      "description": "ST02 退回原因持久化，退回包不能继续领取或完成。",
+      "status": "passed",
+      "seconds": 0.0192,
+      "details": []
+    },
+    {
+      "id": "test_handoff.StoreTests.test_ttl_boundary_and_event_once",
+      "description": "ST07 TTL 到期前可见，到期后为 expired，重复读取只记一次事件。",
+      "status": "passed",
+      "seconds": 0.0207,
+      "details": []
+    },
+    {
+      "id": "test_mcp.McpTests.test_changed_artifact_fails_verification",
+      "description": "MCP04 文件被改动后通过 MCP 核验返回失败。",
+      "status": "passed",
+      "seconds": 1.5276,
+      "details": []
+    },
+    {
+      "id": "test_mcp.McpTests.test_conflict_is_tool_error_and_server_survives",
+      "description": "MCP03 重复竞争领取产生工具错误，服务仍可继续处理请求。",
+      "status": "passed",
+      "seconds": 1.5872,
+      "details": []
+    },
+    {
+      "id": "test_mcp.McpTests.test_discovery_exposes_structured_schema",
+      "description": "MCP01 握手及工具发现成功，创建工具暴露结构化参数。",
+      "status": "passed",
+      "seconds": 1.4773,
+      "details": []
+    },
+    {
+      "id": "test_mcp.McpTests.test_invalid_create_has_no_side_effect",
+      "description": "MCP05 非法创建参数报错且不产生交接包。",
+      "status": "passed",
+      "seconds": 1.5237,
+      "details": []
+    },
+    {
+      "id": "test_mcp.McpTests.test_stdio_complete_lifecycle",
+      "description": "MCP02 独立 stdio 进程完整交接与查询。",
+      "status": "passed",
+      "seconds": 1.6726,
+      "details": []
+    }
+  ]
+}

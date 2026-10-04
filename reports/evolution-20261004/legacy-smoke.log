@@ -1,0 +1,28 @@
+== health ==
+  PASS  health
+== memory 五件套 ==
+  PASS  store
+  PASS  store agent_b
+  PASS  search fts
+  PASS  search cross-agent
+  PASS  search hybrid (vector recall)
+  PASS  search empty query -> recent
+  PASS  get
+  PASS  update
+  PASS  search by tag
+== 总结管道端到端（fake provider）==
+  PASS  messages batch
+  PASS  summary trigger ok
+  PASS  facts extracted
+  PASS  summary non-empty
+  PASS  episodic snapshot
+  PASS  summary get
+  PASS  re-trigger skipped (no new messages)
+  PASS  facts searchable
+== 无 provider 时的优雅降级 ==
+  PASS  no provider -> skipped
+== delete ==
+  PASS  delete
+  PASS  get after delete -> 404
+
+结果: 21 passed, 0 failed

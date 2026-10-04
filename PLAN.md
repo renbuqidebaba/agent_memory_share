@@ -1,140 +1,49 @@
-# 多 Agent 记忆管理系统 — 实施方案 v2
+# Agent Handoff — 产品与实施计划
 
-> 2026-09-30 | 需求重排：跨设备共享降级为最后一期，先做本地单机的记忆管理 + 记忆迁移
+> 2026-10-04。目标已从通用长期记忆调整为：让新 agent 能核验并继续一项未完成任务。旧计划见 `PLAN_legacy.md`。
 
-## 一、优先级重排
+## 第一位用户与场景
 
-| 期 | 目标 | 状态 |
+第一位用户是在同一台机器上使用多个编程 agent 会话的开发者。
+优先验证“实现 → 独立复验”，其次是“排障 → 新 agent 接手”，再验证一对实际客户端间的交接。
+接收方领取后检查文件和验证记录，按包内明确的完成标准继续工作。
+第一版要求同一可信本机用户、共享数据库和可访问的工作区；场景依据与缺口见 [场景评估](docs/USE_CASES.md)。
+
+## MVP 验收
+
+1. 发送方能生成包含目标、状态、完成标准、已完成工作、决策、下一步、待解决问题、文件产物与验证记录的交接包。
+2. 接收方能领取并看到人可读/机器可读的交接内容，能核对 Git HEAD 和所列文件 SHA-256。
+3. 重复领取、错误接收者、租约到期、接受、退回与完成有明确状态；状态变化与事件原子落库。
+4. CLI、HTTP、MCP 使用同一核心逻辑；本机不需要云服务或 LLM。
+5. 有端到端测试和从安装到交接的使用说明。
+
+以上 MVP 能力已实现，见 `README.md`、`tests/` 和 `scripts/demo_handoff.py`。原有记忆 API 仍可用，但当前交接流程不依赖它。
+
+## 0.1.0a1 本地开源候选
+
+已补 MIT 许可、中文与英文简介、贡献和安全说明、交接协议/数据维护/接入指南、
+GitHub CI 配置、独立安装包检查与确定性编程交接演示。
+交接格式 v1/v2、数据库版本 2、旧数据兼容、备份/导出/清理均有回归。
+本地验证结果见 `reports/OPEN_SOURCE_READINESS.md`；真实 agent 效率实验还没有结果。
+CI 文件已配置，跨平台矩阵尚待实际执行。
+
+## 后续验证与开发
+
+已实现自动采集 Git 改动、依赖与文件摘要、显式检查命令的实测记录、绑定任务和租约的核验记录，
+v2 接受前强制引用成功记录并复核现场。CLI/MCP 提供新入口、两个 MCP Prompt 和列表筛选。
+实验准备器会生成三组独立工作区与未运行记录；真实 Agent 效果仍待实际实验。
+使用与边界见 `docs/EVOLUTION.md`。
+
+| 优先级 | 内容 | 判断依据 |
 |---|---|---|
-| **P0** | 多 agent 记忆管理：分 agent 存对话记忆、自动总结提炼、检索注入 | 先做 |
-| **P1** | 记忆迁移：agent 间任务上下文的打包、领取、继承（handoff） | 第二阶段 |
-| **P2** | 跨设备共享 | **最后做，只在架构上预留接口** |
+| 1 | 用真实补丁复验、排障任务做三组对照试验 | 记录准备与接手总成本、复验正确性、重复调查和失败案例；模板见 `examples/handoffs/verification.json` |
+| 2 | 在真实任务中验证已实现的文件改动与实测证据采集 | 减少填包时间，检查遗漏项与排除规则 |
+| 3 | 增加结构化复验结果和后续交接关联 | 接手结论可回查；明确区分“复验任务完成”和“被审代码正确” |
+| 4 | 验证一对真实客户端，再补快捷入口 | 用实际工具调用证明跨客户端流程；当前 MCP 协议测试不能替代客户端会话验收 |
+| 后续 | 跨机器共享与访问控制 | 有明确需求时加身份认证、权限和产物传输；远程服务不能只依赖客户端自报 agent_id |
 
-## 二、核心设计原则：为什么 P2 以后能低成本补上
+实验方法与记录模板见 `docs/EVALUATION.md`；先公布失败案例和可复现结果，再调整交接包字段或推广结论。
 
-跨设备难做的根源是「数据一开始就和本机绑死」。只要 P0 就守住三条纪律，P2 时只需加一个同步层，上层零改动：
+## 当前限制
 
-1. **存储集中在一个 Server 进程内**：agent 永远通过 HTTP API 访问记忆，绝不直接读写本地文件。P2 时把 Server 从 `127.0.0.1` 搬到云上即完成共享。
-2. **所有记忆带完整归属元数据**：`agent_id / user_id / session_id / device_id`，P2 的多设备合并不需要补数据。
-3. **写入走 append-only 事件日志**：每次写记忆记一条事件（带 Lamport 时间戳或单调递增 seq）。P2 的同步 = 事件日志复制，天然支持离线后再合并。
-
-## 三、总体架构
-
-```
-┌──────────┐  ┌──────────┐  ┌──────────┐
-│ Agent A  │  │ Agent B  │  │ Agent C  │     ← 无状态客户端，只持 HTTP client
-└────┬─────┘  └────┬─────┘  └────┬─────┘
-     └─────────────┼─────────────┘
-              HTTP / JSON (本地 127.0.0.1:8787)
-     ┌─────────────▼─────────────┐
-     │      Memory Server        │
-     │ ┌───────────────────────┐ │
-     │ │ API 层                 │ │  memory_* / summary_* / handoff_*
-     │ ├───────────────────────┤ │
-     │ │ 提炼管道(异步)          │ │  原始对话 → 事实抽取 → 摘要合并
-     │ ├───────────────────────┤ │
-     │ │ 存储抽象层(接口)        │ │  ← P2 只换这一层的实现
-     │ └───────────────────────┘ │
-     │   SQLite + sqlite-vec     │     单机零依赖；P2 可换 PG/TiDB
-     │   + events.log(追加日志)  │
-     └───────────────────────────┘
-```
-
-**技术选型**：Python 3.13 + FastAPI + SQLite（+ sqlite-vec 做向量，或先用 FTS5 全文检索，MVP 不强制上 embedding）。理由：单机零运维、一份文件即全部数据、备份=复制文件。embedding 模型走可插拔：本地 Ollama / API 均可。
-
-## 四、数据模型
-
-```sql
--- 记忆主体：三级分层
-memories(
-  id            TEXT PRIMARY KEY,      -- uuid
-  agent_id      TEXT NOT NULL,         -- 归属 agent
-  user_id       TEXT,
-  session_id    TEXT,                  -- 产生时的会话
-  device_id     TEXT,                  -- P2 预留，先填 "local"
-  layer         TEXT NOT NULL,         -- episodic(原始片段) / semantic(提炼事实) / summary(摘要)
-  content       TEXT NOT NULL,
-  tags          TEXT,                  -- JSON array
-  embedding     BLOB,                  -- 可空
-  valid_from    TEXT,                  -- 时态：生效时间（P1 交接校验用）
-  valid_to      TEXT,                  -- 被新事实取代时填
-  seq           INTEGER NOT NULL,      -- 事件序号，P2 同步用
-  created_at    TEXT NOT NULL
-)
-
--- 会话原始记录（提炼管道的输入，不直接给 agent 读）
-messages(
-  id TEXT PK, session_id TEXT, agent_id TEXT,
-  role TEXT, content TEXT, created_at TEXT
-)
-
--- P1：交接包
-handoff_packages(
-  id            TEXT PRIMARY KEY,
-  task_id       TEXT NOT NULL,
-  from_agent    TEXT NOT NULL,
-  to_agent      TEXT,                  -- 可空 = 公开认领
-  status        TEXT NOT NULL,         -- pending / claimed / acked / failed / expired
-  payload       TEXT NOT NULL,         -- 结构化四字段 JSON（见 §6）
-  memory_refs   TEXT NOT NULL,         -- JSON array of memory_id
-  created_at    TEXT, claimed_at TEXT, acked_at TEXT,
-  ttl_seconds   INTEGER                -- 超时未 claim 自动 expired
-)
-```
-
-## 五、P0：记忆管理 + 总结管道
-
-**API（对标 mem9 的五件套 + 两个总结接口）**：
-
-| API | 说明 |
-|---|---|
-| `memory_store` | 写一条记忆（指定 layer、tags、作用域） |
-| `memory_search` | 检索：metadata 过滤 + FTS/向量混合，支持跨 agent 检索（P1 的基础） |
-| `memory_get` / `memory_update` / `memory_delete` | 按 id 操作；delete 是软删（记事件） |
-| `summary_trigger` | 对某 session：抽事实（→semantic 层）+ 生成摘要（→summary 层） |
-| `summary_get` | 取某 agent / 某 session 的最新摘要 |
-
-**总结管道设计**（异步，不阻塞 agent）：
-1. Agent 每轮对话把消息写入 `messages`（或 session 结束时批量提交）
-2. 后台 worker 攒够 N 条或收到 `summary_trigger` 时调 LLM：
-   - **事实抽取**：prompt 要求输出「关于用户/任务/决策的持久事实」列表 → 逐条写入 semantic 层，与已有记忆做去重/取代（更新 `valid_to`）
-   - **滚动摘要**：新对话片段 + 旧摘要 → 新摘要，写入 summary 层
-3. Agent 新 session 启动时调 `summary_get` + `memory_search` 注入上下文
-
-## 六、P1：记忆迁移 / Handoff 协议
-
-**payload schema**（基于 JetBrains Research 结论：结构化四字段优于原始历史）：
-
-```json
-{
-  "task_id": "task_001",
-  "from_agent": "research_agent",
-  "intent": "调研 X 并产出对比报告",
-  "changes_made": ["已抓取 5 个数据源", "已完成 Mem0/Zep 对比表"],
-  "decisions_taken": [{"decision": "排除 CrewAI", "reason": "pickle 序列化脆弱"}],
-  "open_questions": ["Zep 社区版是否还可自托管"],
-  "memory_refs": ["mem_abc", "mem_def"],
-  "instructions": "在此基础上完成 Zep 章节",
-  "ttl_seconds": 86400
-}
-```
-
-**交接闭环（三个 API）**：
-1. `handoff_create` → 生成 package，`memory_refs` 指向的记忆**复制引用**到共享作用域（目标 agent 可读）
-2. `handoff_claim(task_id)` → 接收方拉取 payload + 记忆；**前置校验**：schema 完整性 + 每条 ref 记忆的 `valid_to` 未过期
-3. `handoff_ack(handoff_id, accepted, reason)` → 确认继承；超时未 claim 自动 expired，from_agent 可查询状态决定是否重派
-
-**防坑机制**（来自调研的四大失败模式）：schema 校验防上下文丢失；记录 handoff 链防死循环（同 task 链长上限）；ack/超时防任务孤儿；接收方前置校验防错误静默传播。
-
-## 七、实施步骤
-
-| 步骤 | 内容 | 状态 |
-|---|---|---|
-| S1 | FastAPI 骨架 + SQLite + memories/messages 表 + 5 个记忆 API | ✅ 完成 |
-| S2 | 总结管道：LLM 抽事实 + 滚动摘要（fake/OpenAI 兼容双 provider） | ✅ 完成（端到端可跑） |
-| S3 | 检索增强：FTS5 trigram（中文）+ 向量余弦 + RRF 融合 | ✅ 完成 |
-| S4 | handoff_packages 表 + 三个 handoff API + 校验/超时逻辑 | ⬜ 待做（P1） |
-| S5 | 客户端 SDK（薄封装）+ 一个真实 agent 接入演示 | ⬜ 待做 |
-| S6（P2，最后） | 存储抽象层换远程实现 + events.log 同步 | ⬜ 最后做 |
-
-**S1–S3 已验证**：冒烟测试 21/21 通过（`python scripts/smoke_test.py`），真实 HTTP 服务 curl 验证通过。测试/演示可用内置 `MEMORY_LLM_PROVIDER=fake`（规则模型，零成本）；接真实模型设 `MEMORY_LLM_BASE_URL/API_KEY/MODEL`。
+交接包中的自然语言内容由发送方提供；系统核验文件与版本，并可保存明确执行的检查结果。文件哈希不等于测试通过。已有列表筛选，但没有自动唤醒接收者、远程认证、跨设备产物复制或真实效果基准数据。公开 HTTP 服务前必须完成认证与权限控制。

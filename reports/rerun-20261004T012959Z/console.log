@@ -1,0 +1,166 @@
+{"timestamp_utc": "2026-10-04T01:30:13.369180+00:00", "sqlite": "3.53.1", "duration_seconds": 12.468, "tests_run": 56, "passed": 56, "failed_cases": 0, "skipped": 0, "successful": true}
+[10/04/26 09:30:07] ERROR    Tool 'handoff_claim' raised an        server.py:455
+                             unexpected exception                               
+                             ╭─ Traceback (most recent call last─╮              
+                             │ /Users/lyw/Documents/agent_memory │              
+                             │ _share/.venv/lib/python3.12/site- │              
+                             │ packages/mcp/server/mcpserver/too │              
+                             │ ls/base.py:179 in run             │              
+                             │                                   │              
+                             │   176 │   │   │   │   │   return  │              
+                             │       else resolved               │              
+                             │   177 │   │   │   │   pass_direct │              
+                             │   178 │   │   │                   │              
+                             │ ❱ 179 │   │   │   result = await  │              
+                             │       pass_directly)              │              
+                             │   180 │   │   │                   │              
+                             │   181 │   │   │   # Registration  │              
+                             │   182 │   │   │   # a body that r │              
+                             │                                   │              
+                             │ /Users/lyw/Documents/agent_memory │              
+                             │ _share/.venv/lib/python3.12/site- │              
+                             │ packages/mcp/server/mcpserver/uti │              
+                             │ lities/func_metadata.py:164 in    │              
+                             │ call_fn                           │              
+                             │                                   │              
+                             │   161 │   │   kwargs = arguments  │              
+                             │   162 │   │   if fn_is_async:     │              
+                             │   163 │   │   │   return await fn │              
+                             │ ❱ 164 │   │   return await anyio. │              
+                             │   165 │                           │              
+                             │   166 │   @deprecated(            │              
+                             │   167 │   │   "FuncMetadata.call_ │              
+                             │       3.0; "                      │              
+                             │                                   │              
+                             │ /Users/lyw/Documents/agent_memory │              
+                             │ _share/.venv/lib/python3.12/site- │              
+                             │ packages/anyio/to_thread.py:65 in │              
+                             │ run_sync                          │              
+                             │                                   │              
+                             │   62 │   │   │   stacklevel=2,    │              
+                             │   63 │   │   )                    │              
+                             │   64 │                            │              
+                             │ ❱ 65 │   return await get_async_b │              
+                             │   66 │   │   func, args, abandon_ │              
+                             │   67 │   )                        │              
+                             │   68                              │              
+                             │                                   │              
+                             │ /Users/lyw/Documents/agent_memory │              
+                             │ _share/.venv/lib/python3.12/site- │              
+                             │ packages/anyio/_backends/_asyncio │              
+                             │ .py:2706 in                       │              
+                             │ run_sync_in_worker_thread         │              
+                             │                                   │              
+                             │   2703 │   │   │   │   │   worker │              
+                             │   2704 │   │   │   │              │              
+                             │   2705 │   │   │   │   worker.que │              
+                             │ ❱ 2706 │   │   │   │   return awa │              
+                             │   2707 │                          │              
+                             │   2708 │   @classmethod           │              
+                             │   2709 │   def check_cancelled(cl │              
+                             │                                   │              
+                             │ /Users/lyw/Documents/agent_memory │              
+                             │ _share/.venv/lib/python3.12/site- │              
+                             │ packages/anyio/_backends/_asyncio │              
+                             │ .py:1100 in run                   │              
+                             │                                   │              
+                             │   1097 │   │   │   │   │   except │              
+                             │   1098 │   │   │   │   │   thread │              
+                             │   1099 │   │   │   │   │   try:   │              
+                             │ ❱ 1100 │   │   │   │   │   │   re │              
+                             │   1101 │   │   │   │   │   except │              
+                             │   1102 │   │   │   │   │   │   ex │              
+                             │   1103 │   │   │   │   │   finall │              
+                             │                                   │              
+                             │ /Users/lyw/Documents/agent_memory │              
+                             │ _share/server/app/handoff_mcp.py: │              
+                             │ 38 in handoff_claim               │              
+                             │                                   │              
+                             │   35 @mcp.tool()                  │              
+                             │   36 def handoff_claim(handoff_id │              
+                             │   37 │   """领取待交接任务；领取  │              
+                             │ ❱ 38 │   return store.claim(hando │              
+                             │   39                              │              
+                             │   40                              │              
+                             │   41 @mcp.tool()                  │              
+                             │                                   │              
+                             │ /Users/lyw/Documents/agent_memory │              
+                             │ _share/server/app/storage/handoff │              
+                             │ _store.py:123 in claim            │              
+                             │                                   │              
+                             │   120 │   │   │   │   if row["sta │              
+                             │       row["claim_until"] > now:   │              
+                             │   121 │   │   │   │   │   return  │              
+                             │   122 │   │   │   │   if row["sta │              
+                             │       "claimed" and row["claim_un │              
+                             │ ❱ 123 │   │   │   │   │   raise H │              
+                             │   124 │   │   │   │   conn.execut │              
+                             │   125 │   │   │   │   │   """UPDA │              
+                             │       claim_until = ?,            │              
+                             │   126 │   │   │   │   │      upda │              
+                             ╰───────────────────────────────────╯              
+                             HandoffConflict: 交接包当前状态为                  
+                             claimed，不可领取                                  
+                                                                                
+                             The above exception was the direct                 
+                             cause of the following exception:                  
+                                                                                
+                             ╭─ Traceback (most recent call last─╮              
+                             │ /Users/lyw/Documents/agent_memory │              
+                             │ _share/.venv/lib/python3.12/site- │              
+                             │ packages/mcp/server/mcpserver/ser │              
+                             │ ver.py:442 in _handle_call_tool   │              
+                             │                                   │              
+                             │    439 │   ) -> CallToolResult |  │              
+                             │    440 │   │   context = Context( │              
+                             │        subscriptions=self._subscr │              
+                             │    441 │   │   try:               │              
+                             │ ❱  442 │   │   │   return await s │              
+                             │    443 │   │   except MCPError:   │              
+                             │    444 │   │   │   raise          │              
+                             │    445 │   │   except Exception a │              
+                             │                                   │              
+                             │ /Users/lyw/Documents/agent_memory │              
+                             │ _share/.venv/lib/python3.12/site- │              
+                             │ packages/mcp/server/mcpserver/ser │              
+                             │ ver.py:548 in call_tool           │              
+                             │                                   │              
+                             │    545 │   │   """                │              
+                             │    546 │   │   if context is None │              
+                             │    547 │   │   │   context = Cont │              
+                             │ ❱  548 │   │   return await self. │              
+                             │        convert_result=True)       │              
+                             │    549 │                          │              
+                             │    550 │   async def list_resourc │              
+                             │    551 │   │   """List all availa │              
+                             │                                   │              
+                             │ /Users/lyw/Documents/agent_memory │              
+                             │ _share/.venv/lib/python3.12/site- │              
+                             │ packages/mcp/server/mcpserver/too │              
+                             │ ls/tool_manager.py:87 in          │              
+                             │ call_tool                         │              
+                             │                                   │              
+                             │   84 │   │   if not tool:         │              
+                             │   85 │   │   │   raise ToolError( │              
+                             │   86 │   │                        │              
+                             │ ❱ 87 │   │   return await tool.ru │              
+                             │   88                              │              
+                             │                                   │              
+                             │ /Users/lyw/Documents/agent_memory │              
+                             │ _share/.venv/lib/python3.12/site- │              
+                             │ packages/mcp/server/mcpserver/too │              
+                             │ ls/base.py:213 in run             │              
+                             │                                   │              
+                             │   210 │   │   │   raise ToolError │              
+                             │   211 │   │   except Exception as │              
+                             │   212 │   │   │   # A crash: the  │              
+                             │ ❱ 213 │   │   │   raise Unexpecte │              
+                             │   214                             │              
+                             ╰───────────────────────────────────╯              
+                             UnexpectedToolError: Error executing               
+                             tool handoff_claim                                 
+[10/04/26 09:30:10] INFO     Tool 'handoff_create' rejected        server.py:450
+                             arguments: ['payload.from_agent',                  
+                             'payload.goal',                                    
+                             'payload.status_summary',                          
+                             'payload.task_id']                                 

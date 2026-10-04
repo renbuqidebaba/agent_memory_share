@@ -1,0 +1,9 @@
+include LICENSE README.md README.en.md CHANGELOG.md CONTRIBUTING.md SECURITY.md PLAN.md
+include uv.lock
+include reports/OPEN_SOURCE_READINESS.md
+recursive-include docs *.md *.json
+recursive-include examples *.json *.md *.toml
+recursive-include scripts *.py
+recursive-include tests *.py
+exclude reports/*.json
+exclude reports/*.log

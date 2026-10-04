@@ -1,0 +1,28 @@
+WARNING: The directory '/Users/lyw/Library/Caches/pip' or its parent directory is not owned or is not writable by the current user. The cache has been disabled. Check the permissions and owner of that directory. If executing pip with sudo, you should use sudo's -H flag.
+Processing /Users/lyw/Documents/agent_memory_share/reports/local/evolution-dist/agent_handoff_local-0.1.0a1-py3-none-any.whl (from agent-handoff-local==0.1.0a1)
+WARNING: Retrying (Retry(total=4, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x10823ede0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known')': /simple/fastapi/
+WARNING: Retrying (Retry(total=3, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1088dcf20>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known')': /simple/fastapi/
+WARNING: Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1088dd1c0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known')': /simple/fastapi/
+WARNING: Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1088dd3d0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known')': /simple/fastapi/
+WARNING: Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError('<pip._vendor.urllib3.connection.HTTPSConnection object at 0x1088dd5e0>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known')': /simple/fastapi/
+INFO: pip is looking at multiple versions of agent-handoff-local to determine which version is compatible with other requirements. This could take a while.
+ERROR: Cannot install agent-handoff-local because these package versions have conflicting dependencies.
+
+The conflict is caused by:
+    agent-handoff-local 0.1.0a1 depends on fastapi<1 and >=0.115
+    The user requested (constraint) fastapi==0.142.2
+
+To fix this you could try to:
+1. loosen the range of package versions you've specified
+2. remove package versions to allow pip to attempt to solve the dependency conflict
+
+ERROR: ResolutionImpossible: for help visit https://pip.pypa.io/en/latest/topics/dependency-resolution/#dealing-with-dependency-conflicts
+{
+  "successful": false,
+  "wheels": [
+    {
+      "successful": false,
+      "error": "Command '['/private/var/folders/bt/z4h84ls13jd_9_733kwp24b80000gn/T/handoff_wheel_l9deosjy/venv/bin/python', '-I', '-m', 'pip', '--isolated', '--disable-pip-version-check', 'install', '--constraint', '/Users/lyw/Documents/agent_memory_share/reports/local/locked-requirements.txt', '/Users/lyw/Documents/agent_memory_share/reports/local/evolution-dist/agent_handoff_local-0.1.0a1-py3-none-any.whl[mcp]']' returned non-zero exit status 1."
+    }
+  ]
+}

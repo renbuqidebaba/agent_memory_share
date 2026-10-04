@@ -1,0 +1,17 @@
+{
+  "trial_id": "REPLACE_WITH_UNIQUE_TRIAL_ID",
+  "task_id": "pagination-boundaries",
+  "condition": "handoff",
+  "model": "RECORD_EXACT_MODEL",
+  "client_version": "RECORD_CLIENT_VERSION",
+  "source_revision": "RECORD_GIT_HEAD",
+  "status": "completed",
+  "elapsed_seconds": null,
+  "input_tokens": null,
+  "output_tokens": null,
+  "repeated_checks": null,
+  "evidence": "",
+  "sender_elapsed_seconds": null,
+  "sender_input_tokens": null,
+  "sender_output_tokens": null
+}
