@@ -1,6 +1,6 @@
 """SQLite 连接与 schema 初始化。
 
-CLI、MCP 和 HTTP 共用本地数据库。PRAGMA user_version 记录数据库格式版本。
+CLI、MCP 共用本地数据库。PRAGMA user_version 记录数据库格式版本。
 事件随状态在同一事务提交；显式清理历史交接时也会清理关联事件。
 """
 import sqlite3
@@ -29,33 +29,6 @@ CREATE TABLE IF NOT EXISTS handoff_check_runs (
 """
 
 SCHEMA = """
-CREATE TABLE IF NOT EXISTS memories (
-  id          TEXT PRIMARY KEY,
-  agent_id    TEXT NOT NULL,
-  user_id     TEXT,
-  session_id  TEXT,
-  device_id   TEXT NOT NULL DEFAULT 'local',
-  layer       TEXT NOT NULL CHECK (layer IN ('episodic','semantic','summary')),
-  content     TEXT NOT NULL,
-  tags        TEXT NOT NULL DEFAULT '[]',
-  embedding   BLOB,
-  valid_from  TEXT,
-  valid_to    TEXT,
-  deleted_at  TEXT,
-  created_at  TEXT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS messages (
-  id          TEXT PRIMARY KEY,
-  session_id  TEXT NOT NULL,
-  agent_id    TEXT NOT NULL,
-  user_id     TEXT,
-  role        TEXT NOT NULL,
-  content     TEXT NOT NULL,
-  summarized  INTEGER NOT NULL DEFAULT 0,
-  created_at  TEXT NOT NULL
-);
-
 -- Local event history, not a cross-device replication protocol.
 CREATE TABLE IF NOT EXISTS events (
   seq         INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -81,14 +54,6 @@ CREATE TABLE IF NOT EXISTS handoffs (
 CREATE INDEX IF NOT EXISTS idx_handoffs_task ON handoffs(task_id, created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_handoffs_status ON handoffs(status, expires_at);
 
--- FTS5 全文检索：trigram 分词器支持中文子串匹配（unicode61 不切分 CJK）
-CREATE VIRTUAL TABLE IF NOT EXISTS memories_fts USING fts5(
-  content, id UNINDEXED, tokenize = 'trigram'
-);
-
-CREATE INDEX IF NOT EXISTS idx_memories_agent ON memories(agent_id, layer);
-CREATE INDEX IF NOT EXISTS idx_memories_session ON memories(session_id);
-CREATE INDEX IF NOT EXISTS idx_messages_session ON messages(session_id, summarized);
 """
 
 

@@ -1,7 +1,7 @@
 # Contributing
 
 欢迎中文或英文 issue / pull request。当前目标是让同一可信本机用户下的编程 agent 可靠交接任务。
-新功能请先说明实际失败场景；旧记忆模块以兼容和缺陷维护为主。
+新功能请先说明实际失败场景；产品只提供 CLI、stdio MCP 和任务交接核心。
 
 ## 开发环境
 
@@ -10,9 +10,8 @@ Python 3.10+、Git；Linux/macOS。仓库根目录运行：
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -e '.[test,mcp,dev]'
+python -m pip install -e '.[mcp,dev]'
 python scripts/run_handoff_tests.py --require-mcp --output reports/local/tests.json
-python scripts/smoke_test.py
 python scripts/demo_handoff.py --output reports/local/demo
 ruff check server scripts tests
 python -m build
@@ -23,17 +22,17 @@ python scripts/check_wheel.py dist/*.whl
 演示输出目录必须不存在，可换一个新目录再次运行。完整专项测试缺少 MCP 依赖时会直接失败。
 测试使用临时数据库，不需要 API key，也不会调用真实 LLM。配置了 `HANDOFF_*` 的开发者应使用测试入口脚本，避免直接导入应用访问自己的数据。
 
-仓库提供 `uv.lock`，复现 CI 依赖可用 `uv sync --locked --extra test --extra mcp --extra dev`。
+仓库提供 `uv.lock`，复现 CI 依赖可用 `uv sync --locked --extra mcp --extra dev`。
 `pyproject.toml` 是依赖声明的唯一来源；`server/requirements.txt` 仅保留兼容入口。
 
 ## 代码布局
 
 - `server/app/storage/handoff_store.py`：交接状态与事件事务。
 - `server/app/handoff_artifacts.py`：工作区文件摘要、Git HEAD、Markdown。
-- `server/app/models.py`：交接 JSON Schema 与旧 API 模型。
-- `server/app/handoff_cli.py`、`handoff_mcp.py`、`routers/handoff.py`：三个入口。
+- `server/app/models.py`：交接 JSON Schema。
+- `server/app/handoff_cli.py`、`handoff_mcp.py`：CLI 和 MCP 两个入口。
 - `server/app/maintenance.py`：导出、备份、明确请求的历史清理。
-- `tests/`：真实 SQLite、临时文件/Git 仓库、HTTP、子进程 CLI/MCP 回归。
+- `tests/`：真实 SQLite、临时文件/Git 仓库、子进程 CLI/MCP 回归。
 
 ## 提交修改
 

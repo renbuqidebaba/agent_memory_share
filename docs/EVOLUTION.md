@@ -38,7 +38,7 @@ agent-handoff verifications HANDOFF_ID
 - `validation` 和任务描述：发送者的声明；它们不会升级为工具实测结果。
 - v2 包接受时引用 `verification_id`。记录绑定任务、领取者、领取租约、交接包内容摘要及核验工作区。
 - 接受时再次检查相关工作区；文件变化、核验失败、跨任务引用或租约重领后的旧记录均被拒绝。
-- `handoff_get` 返回核验记录；CLI `verifications` 与 HTTP `GET /v1/handoffs/{id}/verifications` 可查看历史。
+- `handoff_get` 返回核验记录；CLI `verifications` 可查看历史。
 - 列表新增接收者和工作区筛选；接收者筛选也包括未指定接收者的包，最多返回 100 项。
 
 检查运行后修改了其核验范围内的代码，或检查命令自己修改了这些代码，该记录不能附到新交接包；应重新运行检查。

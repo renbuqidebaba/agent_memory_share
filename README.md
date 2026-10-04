@@ -17,7 +17,7 @@ Agent Handoff 将**目标、进度、决策、下一步、文件与验证记录*
 - **交清楚正在做什么**：完成标准、已完成工作与待解决问题有各自的位置，也能导出为人可读的 Markdown。
 - **核对拿到的是哪份代码**：创建时记录 Git HEAD 与所列文件的 SHA-256，接手时发现版本变化、文件缺失或内容改变。
 - **明确谁已经接手**：领取、租约、接受、退回和完成都有持久状态与事件记录。
-- **沿用你的开发工具**：CLI、stdio MCP 和本机 HTTP API 共用一个 SQLite 数据库，不绑定模型提供商。
+- **沿用你的开发工具**：CLI 和 stdio MCP 共用一个 SQLite 数据库，不绑定模型提供商。
 
 <a id="quick-start"></a>
 
@@ -77,7 +77,7 @@ flowchart LR
 ```
 
 交接包保存文件引用；v2 自动采集还包含所选改动的 diff 和有限检查日志，完整文件仍留在工作区。
-CLI / MCP 创建时计算文件摘要；HTTP 创建时保存调用者提供的内容。
+CLI / MCP 创建时计算文件摘要，共用任务交接核心。
 
 编辑 [交接包示例](examples/handoff.json)，填入真实目标和工作区内的相对文件路径：
 
@@ -106,14 +106,14 @@ python -m pip install -e '.[mcp]'
 ```
 
 让 MCP 客户端启动虚拟环境中的 `agent-handoff-mcp`，并为发送方、接收方设置同一个 `HANDOFF_DB_PATH`。
-[接入指南](docs/INTEGRATIONS.md)提供 Codex 配置、HTTP 使用方法与常见故障；[指令模板](examples/agent-instructions.md)帮助 agent 生成和接收交接包。
+[接入指南](docs/INTEGRATIONS.md)提供 MCP 配置、CLI 使用方法与常见故障；[指令模板](examples/agent-instructions.md)帮助 agent 生成和接收交接包。
 
 ## 项目状态
 
-当前为 **0.1.0a1 / Alpha**，从源码安装，尚未发布到 PyPI。CLI、HTTP 和 MCP 协议入口已有本地回归验证；真实 agent 的接手效率仍待[对照实验](docs/EVALUATION.md)检验。
+当前为 **0.1.0a1 / Alpha**，从源码安装，尚未发布到 PyPI。CLI 和 MCP 协议入口已有本地回归验证；真实 agent 的接手效率仍待[对照实验](docs/EVALUATION.md)检验。
 
 - 上述 `create` 流程核验 Git HEAD 与显式列出的文件；测试记录由发送方提供，接收方需复验。`verify` 不执行包中的命令。
-- 上述流程默认由接收方决定接受，不强制要求先通过核验。`agent_id` 是标签，不是认证；HTTP 仅用于可信本机。
+- 上述 v1 示例保留原接受方式；v2 `capture` 流程必须引用成功核验记录。`agent_id` 是标签，不是身份认证。
 - 默认数据位于 `~/.local/share/agent-handoff/memory.db`。配置、备份、导出和清理见[数据维护](docs/DATA.md)。
 
 如果只需恢复同一客户端的会话，原生恢复功能可能更直接；如果需要明确的交接内容、代码核验与接收状态，再考虑使用本项目。
@@ -126,7 +126,7 @@ python -m pip install -e '.[mcp]'
 |---|---|
 | 跑一个完整例子 | [交接演示](docs/DEMO.md) |
 | 选择落地场景 | [场景与优先级](docs/USE_CASES.md) |
-| 接入编程工具 | [MCP / CLI / HTTP](docs/INTEGRATIONS.md) |
+| 接入编程工具 | [MCP / CLI](docs/INTEGRATIONS.md) |
 | 自定义交接包 | [格式与状态](docs/PROTOCOL.md) · [JSON Schema](docs/handoff.schema.json) |
 | 管理本地数据 | [存储与升级](docs/DATA.md) |
 | 了解后续方向 | [路线图](PLAN.md) · [变更日志](CHANGELOG.md) |

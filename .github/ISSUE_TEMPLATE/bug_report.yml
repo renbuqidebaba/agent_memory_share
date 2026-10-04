@@ -28,7 +28,6 @@ body:
       label: Entry point / 使用入口
       options:
         - CLI
-        - HTTP
         - MCP
         - Installation / 安装
         - Legacy memory API / 旧记忆接口
@@ -52,6 +51,6 @@ body:
     id: actual
     attributes:
       label: Actual behavior and logs / 实际行为与日志
-      description: Include the exit code or HTTP status and the full relevant error after removing private information.
+      description: Include the exit code or MCP tool error and the full relevant error after removing private information.
     validations:
       required: true

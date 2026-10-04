@@ -17,7 +17,7 @@ Agent Handoff saves the **goal, progress, decisions, next steps, files and valid
 - **Explain the work in progress.** Keep completion criteria, finished work and open questions together, with a readable Markdown export.
 - **Check which code arrived.** Capture Git HEAD and SHA-256 hashes of listed files; detect changed, missing or mismatched evidence before continuing.
 - **Track who has taken over.** Persist claims, leases, acceptance, rejection and completion alongside their events.
-- **Use your existing tools.** CLI, stdio MCP and a local HTTP API share a SQLite database without depending on a model provider.
+- **Use your existing tools.** CLI and stdio MCP share a SQLite database without depending on a model provider.
 
 <a id="quick-start"></a>
 
@@ -72,7 +72,7 @@ flowchart LR
     W -->|complete| D[Close handoff]
 ```
 
-Packages contain file references rather than copies of source files. CLI and MCP creation calculate hashes; HTTP creation stores the supplied payload.
+Packages contain file references; v2 capture also records bounded diffs and check logs. CLI and MCP creation calculate hashes through the shared core.
 
 Edit [the example package](examples/handoff.json) with your actual task and workspace-relative file paths:
 
@@ -101,14 +101,14 @@ python -m pip install -e '.[mcp]'
 ```
 
 Configure your MCP client to launch the virtual environment's `agent-handoff-mcp` executable. Give both agents the same `HANDOFF_DB_PATH`.
-The [integration guide](docs/INTEGRATIONS.md) covers Codex configuration, HTTP and troubleshooting. Use the [sender and receiver instructions](examples/agent-instructions.md) as a starting point.
+The [integration guide](docs/INTEGRATIONS.md) covers MCP configuration, CLI usage and troubleshooting. Use the [sender and receiver instructions](examples/agent-instructions.md) as a starting point.
 
 ## Project status
 
-**0.1.0a1 / Alpha.** Install from source; no PyPI release has been published. CLI, HTTP and MCP have local regression checks. Improvements to real-agent handoff efficiency still need [controlled evaluation](docs/EVALUATION.md).
+**0.1.0a1 / Alpha.** Install from source; no PyPI release has been published. CLI and MCP have local regression checks. Improvements to real-agent handoff efficiency still need [controlled evaluation](docs/EVALUATION.md).
 
 - The `create` workflow above verifies Git HEAD and explicitly listed files. Validation records are sender claims; receivers should rerun checks. `verify` never executes recorded commands.
-- This workflow leaves acceptance to the receiver and does not require successful verification by default. Agent IDs are labels, not authentication; HTTP is for trusted local use.
+- The v1 example retains its original acceptance policy. The v2 capture workflow requires a successful verification receipt. Agent IDs are labels, not authentication.
 - Default data lives in `~/.local/share/agent-handoff/memory.db`. See [data management](docs/DATA.md) for configuration, backups, export and retention.
 
 A client's built-in resume may be sufficient for continuing its own session. Agent Handoff is useful when you need an explicit work package, file checks and a receiving state.
@@ -121,7 +121,7 @@ A client's built-in resume may be sufficient for continuing its own session. Age
 |---|---|
 | Run a complete example | [Handoff demo](docs/DEMO.md) |
 | Choose a workflow | [Use cases and priorities](docs/USE_CASES.md) |
-| Connect a coding tool | [MCP / CLI / HTTP](docs/INTEGRATIONS.md) |
+| Connect a coding tool | [MCP / CLI](docs/INTEGRATIONS.md) |
 | Customize a package | [Protocol](docs/PROTOCOL.md) · [JSON Schema](docs/handoff.schema.json) |
 | Manage local data | [Storage and upgrades](docs/DATA.md) |
 | See what comes next | [Roadmap](PLAN.md) · [Changelog](CHANGELOG.md) |

@@ -16,6 +16,7 @@ import sys
 import tempfile
 import textwrap
 import time
+import zipfile
 
 
 # Kept self-contained so this file can inspect the installed distribution without
@@ -23,19 +24,18 @@ import time
 INSTALLED_CHECKS = r'''
 import asyncio
 import importlib.metadata
+import importlib.util
 import json
 import os
 from pathlib import Path
-import socket
 import sqlite3
 import subprocess
 import sys
 import time
-import urllib.error
-import urllib.request
 
 import app
-from mcp import Client, StdioServerParameters
+if "--core-only" not in sys.argv:
+    from mcp import Client, StdioServerParameters
 
 root = Path.cwd()
 prefix = Path(sys.prefix).resolve()
@@ -93,49 +93,6 @@ with sqlite3.connect(backup) as connection:
 preview = command("purge", "--older-than-days", "30")
 assert preview["dry_run"] is True and preview["count"] == 0
 
-# Bind before spawning to avoid racing another process for a free TCP port.
-# uvicorn inherits this socket on the Linux/macOS CI platforms.
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as listener:
-    listener.bind(("127.0.0.1", 0))
-    listener.listen()
-    port = listener.getsockname()[1]
-    http_command = [sys.executable, "-I", "-m", "uvicorn", "app.main:app", "--log-level", "warning"]
-    process_options = {}
-    if os.name == "nt":
-        listener.close()
-        http_command += ["--host", "127.0.0.1", "--port", str(port)]
-    else:
-        http_command += ["--fd", str(listener.fileno())]
-        process_options["pass_fds"] = (listener.fileno(),)
-    with (root / "http.log").open("w+", encoding="utf-8") as log:
-        process = subprocess.Popen(http_command, stdout=log, stderr=log, **process_options)
-        try:
-            deadline = time.monotonic() + 20
-            # Explicitly disable environment proxies for this loopback request.
-            opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
-            while True:
-                if process.poll() is not None:
-                    log.seek(0)
-                    raise AssertionError(f"HTTP server exited: {log.read()}")
-                try:
-                    with opener.open(f"http://127.0.0.1:{port}/health", timeout=1) as response:
-                        health = json.load(response)
-                    assert health == {"status": "ok", "version": version}, health
-                    break
-                except (urllib.error.URLError, TimeoutError, OSError):
-                    if time.monotonic() >= deadline:
-                        log.seek(0)
-                        raise AssertionError(f"HTTP health timed out: {log.read()}")
-                    time.sleep(0.1)
-        finally:
-            process.terminate()
-            try:
-                process.wait(timeout=5)
-            except subprocess.TimeoutExpired:
-                process.kill()
-                process.wait(timeout=5)
-
-
 async def mcp_lifecycle():
     # Official SDK client starts the installed stdio executable, not a source module.
     params = StdioServerParameters(command=str(mcp_executable), args=[], env=dict(os.environ))
@@ -181,11 +138,21 @@ async def run_mcp():
     return await asyncio.wait_for(mcp_lifecycle(), timeout=45)
 
 
-names = asyncio.run(run_mcp())
+assert importlib.util.find_spec("fastapi") is None, "FastAPI leaked into the installation"
+assert importlib.util.find_spec("app.main") is None, "Removed HTTP entry point is still installed"
+with sqlite3.connect(os.environ["HANDOFF_DB_PATH"]) as connection:
+    tables = {r[0] for r in connection.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+assert not {"memories", "messages", "memories_fts"} & tables
+if "--core-only" in sys.argv:
+    assert importlib.util.find_spec("mcp") is None
+    assert importlib.util.find_spec("uvicorn") is None
+    names = []
+else:
+    names = asyncio.run(run_mcp())
 print(json.dumps({
     "version": version, "python": sys.version, "imported_from": str(module),
     "checks": ["installed_import", "cli_lifecycle", "export", "backup_integrity",
-               "purge_preview", "http_loopback", "mcp_stdio_lifecycle"],
+               "purge_preview", "no_legacy_interfaces"] + (["minimal_cli_dependencies"] if not names else ["mcp_stdio_lifecycle"]),
     "mcp_tools": names,
 }))
 '''
@@ -196,13 +163,18 @@ def clean_environment(directory: Path) -> dict[str, str]:
            if not key.startswith(("HANDOFF_", "MEMORY_", "PYTHON", "PIP_", "GIT_"))}
     env.update({"PYTHONNOUSERSITE": "1", "PYTHONUTF8": "1",
                 "HANDOFF_DATA_DIR": str(directory / "data"),
-                "HANDOFF_DB_PATH": str(directory / "data" / "check.db"),
-                "MEMORY_LLM_PROVIDER": "fake"})
+                "HANDOFF_DB_PATH": str(directory / "data" / "check.db")})
     return env
 
 
 def check_wheel(wheel: Path, wheelhouse: Path | None, constraints: Path | None) -> dict:
     started = time.monotonic()
+    with zipfile.ZipFile(wheel) as archive:
+        removed = ("app/main.py", "app/routers/", "app/llm/", "app/pipeline/",
+                   "app/storage/base.py", "app/storage/sqlite_store.py")
+        unexpected = [name for name in archive.namelist() if name.startswith(removed)]
+        if unexpected:
+            raise ValueError(f"Removed service code remains in the wheel: {unexpected}")
     with tempfile.TemporaryDirectory(prefix="handoff_wheel_") as temp:
         root = Path(temp).resolve()
         env = clean_environment(root)
@@ -217,7 +189,18 @@ def check_wheel(wheel: Path, wheelhouse: Path | None, constraints: Path | None) 
             install += ["--no-index", "--find-links", str(wheelhouse)]
         if constraints:
             install += ["--constraint", str(constraints)]
-        install.append(f"{wheel}[mcp]")
+        # First prove the CLI works with only the base dependencies.
+        install.append(str(wheel))
+        subprocess.run(install, cwd=root, env=env, check=True, timeout=300)
+        runner = root / "installed_checks.py"
+        runner.write_text(textwrap.dedent(INSTALLED_CHECKS), encoding="utf-8")
+        core = subprocess.run([str(python), "-I", str(runner), "--core-only"],
+            cwd=root, env=env, check=True, capture_output=True, text=True, timeout=60)
+        core_report = json.loads(core.stdout)
+        # The second phase uses independent data to keep lifecycle assertions exact.
+        env["HANDOFF_DB_PATH"] = str(root / "mcp-data" / "check.db")
+        (root / "backup.db").unlink()
+        install[-1] = f"{wheel}[mcp]"
         subprocess.run(install, cwd=root, env=env, check=True, timeout=300)
         subprocess.run([str(python), "-I", "-m", "pip", "check"],
                        cwd=root, env=env, check=True, timeout=30)
@@ -244,6 +227,7 @@ def check_wheel(wheel: Path, wheelhouse: Path | None, constraints: Path | None) 
         if process.returncode:
             raise RuntimeError(f"Installed checks failed for {wheel.name}:\n{stdout}\n{stderr}")
         report = json.loads(stdout)
+        report["minimal_cli"] = core_report
         report.update({"wheel": wheel.name, "successful": True,
                        "seconds": round(time.monotonic() - started, 3)})
         return report

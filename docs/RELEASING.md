@@ -1,12 +1,11 @@
 # 本地发布候选检查
 
-当前阶段只准备源码与分发包；用户暂不要求处理远程仓库或发布渠道。
+当前仓库已连接 GitHub；安装包发布仍须单独执行。
 从仓库根目录、干净开发环境执行：
 
 ```bash
-python -m pip install -e '.[test,mcp,dev]'
+python -m pip install -e '.[mcp,dev]'
 python scripts/run_handoff_tests.py --require-mcp --output reports/local/tests.json
-python scripts/smoke_test.py
 ruff check server scripts tests
 python scripts/demo_handoff.py --output reports/local/demo
 python -m build

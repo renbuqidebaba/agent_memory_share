@@ -31,7 +31,7 @@
     {
       "command": "python scripts/run_handoff_tests.py --require-mcp --output reports/local/verification.json",
       "outcome": "not_run",
-      "detail": "需安装 .[test,mcp]；由接收方检查命令后自行运行。模板不包含测试通过声明。"
+      "detail": "需安装 .[mcp]；由接收方检查命令后自行运行。模板不包含测试通过声明。"
     }
   ],
   "ttl_seconds": 86400

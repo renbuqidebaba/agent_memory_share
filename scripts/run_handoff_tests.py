@@ -74,7 +74,7 @@ def main():
         with args.output.with_suffix(".log").open("w", encoding="utf-8") as log:
             result = unittest.TextTestRunner(stream=log, verbosity=2, resultclass=RecordedResult).run(suite)
         versions = {}
-        for package in ("fastapi", "pydantic", "httpx", "httpx2", "mcp"):
+        for package in ("pydantic", "mcp", "mcp-types"):
             try:
                 versions[package] = importlib.metadata.version(package)
             except importlib.metadata.PackageNotFoundError:

@@ -1,0 +1,145 @@
+Processing /Users/lyw/Documents/agent_memory_share/reports/local/interface-cleanup-dist/agent_handoff_local-0.1.0a1-py3-none-any.whl
+Collecting pydantic<3,>=2.7 (from agent-handoff-local==0.1.0a1)
+  Using cached pydantic-2.13.5-py3-none-any.whl.metadata (110 kB)
+Collecting annotated-types>=0.6.0 (from pydantic<3,>=2.7->agent-handoff-local==0.1.0a1)
+  Using cached annotated_types-0.8.0-py3-none-any.whl.metadata (15 kB)
+Collecting pydantic-core==2.46.5 (from pydantic<3,>=2.7->agent-handoff-local==0.1.0a1)
+  Using cached pydantic_core-2.46.5-cp312-cp312-macosx_10_12_x86_64.whl.metadata (6.6 kB)
+Collecting typing-extensions>=4.14.1 (from pydantic<3,>=2.7->agent-handoff-local==0.1.0a1)
+  Using cached typing_extensions-4.16.0-py3-none-any.whl.metadata (3.3 kB)
+Collecting typing-inspection>=0.4.2 (from pydantic<3,>=2.7->agent-handoff-local==0.1.0a1)
+  Using cached typing_inspection-0.4.4-py3-none-any.whl.metadata (2.6 kB)
+Using cached pydantic-2.13.5-py3-none-any.whl (472 kB)
+Using cached pydantic_core-2.46.5-cp312-cp312-macosx_10_12_x86_64.whl (2.1 MB)
+Using cached annotated_types-0.8.0-py3-none-any.whl (13 kB)
+Using cached typing_extensions-4.16.0-py3-none-any.whl (45 kB)
+Using cached typing_inspection-0.4.4-py3-none-any.whl (14 kB)
+Installing collected packages: typing-extensions, annotated-types, typing-inspection, pydantic-core, pydantic, agent-handoff-local
+Successfully installed agent-handoff-local-0.1.0a1 annotated-types-0.8.0 pydantic-2.13.5 pydantic-core-2.46.5 typing-extensions-4.16.0 typing-inspection-0.4.4
+Processing /Users/lyw/Documents/agent_memory_share/reports/local/interface-cleanup-dist/agent_handoff_local-0.1.0a1-py3-none-any.whl (from agent-handoff-local==0.1.0a1)
+Requirement already satisfied: pydantic<3,>=2.7 in ./venv/lib/python3.12/site-packages (from agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1) (2.13.5)
+Collecting mcp<3,>=2.3 (from agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached mcp-2.3.0-py3-none-any.whl.metadata (6.6 kB)
+Collecting cryptography<49,>=48 (from agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached cryptography-48.0.1-cp311-abi3-macosx_10_9_universal2.whl.metadata (4.3 kB)
+Collecting cffi>=2.0.0 (from cryptography<49,>=48->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached cffi-2.1.1-cp312-cp312-macosx_10_15_x86_64.whl.metadata (2.5 kB)
+Collecting anyio>=4.9 (from mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached anyio-4.15.1-py3-none-any.whl.metadata (4.7 kB)
+Collecting httpx2>=2.10.0 (from mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached httpx2-2.13.1-py3-none-any.whl.metadata (9.8 kB)
+Collecting jsonschema>=4.20.0 (from mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached jsonschema-4.26.0-py3-none-any.whl.metadata (7.6 kB)
+Collecting mcp-types==2.3.0 (from mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached mcp_types-2.3.0-py3-none-any.whl.metadata (1.9 kB)
+Collecting opentelemetry-api>=1.28.0 (from mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached opentelemetry_api-1.45.0-py3-none-any.whl.metadata (1.4 kB)
+Collecting pyjwt>=2.10.1 (from pyjwt[crypto]>=2.10.1->mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached pyjwt-2.15.1-py3-none-any.whl.metadata (3.5 kB)
+Collecting python-multipart>=0.0.9 (from mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached python_multipart-0.0.32-py3-none-any.whl.metadata (2.1 kB)
+Collecting sse-starlette>=3.0.0 (from mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached sse_starlette-3.5.0-py3-none-any.whl.metadata (15 kB)
+Collecting starlette>=0.27 (from mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached starlette-1.7.0-py3-none-any.whl.metadata (6.6 kB)
+Requirement already satisfied: typing-extensions>=4.13.0 in ./venv/lib/python3.12/site-packages (from mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1) (4.16.0)
+Requirement already satisfied: typing-inspection>=0.4.1 in ./venv/lib/python3.12/site-packages (from mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1) (0.4.4)
+Collecting uvicorn>=0.31.1 (from mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached uvicorn-0.54.0-py3-none-any.whl.metadata (6.6 kB)
+Requirement already satisfied: annotated-types>=0.6.0 in ./venv/lib/python3.12/site-packages (from pydantic<3,>=2.7->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1) (0.8.0)
+Requirement already satisfied: pydantic-core==2.46.5 in ./venv/lib/python3.12/site-packages (from pydantic<3,>=2.7->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1) (2.46.5)
+Collecting idna>=2.8 (from anyio>=4.9->mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached idna-3.20-py3-none-any.whl.metadata (7.2 kB)
+Collecting pycparser (from cffi>=2.0.0->cryptography<49,>=48->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached pycparser-3.0-py3-none-any.whl.metadata (8.2 kB)
+Collecting httpcore2==2.13.1 (from httpx2>=2.10.0->mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached httpcore2-2.13.1-py3-none-any.whl.metadata (26 kB)
+Collecting truststore>=0.10 (from httpx2>=2.10.0->mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached truststore-0.10.4-py3-none-any.whl.metadata (4.4 kB)
+Collecting h11>=0.16 (from httpcore2==2.13.1->httpx2>=2.10.0->mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached h11-0.16.0-py3-none-any.whl.metadata (8.3 kB)
+Collecting attrs>=22.2.0 (from jsonschema>=4.20.0->mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached attrs-26.1.0-py3-none-any.whl.metadata (8.8 kB)
+Collecting jsonschema-specifications>=2023.03.6 (from jsonschema>=4.20.0->mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached jsonschema_specifications-2025.9.1-py3-none-any.whl.metadata (2.9 kB)
+Collecting referencing>=0.28.4 (from jsonschema>=4.20.0->mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached referencing-0.37.0-py3-none-any.whl.metadata (2.8 kB)
+Collecting rpds-py>=0.25.0 (from jsonschema>=4.20.0->mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached rpds_py-2026.6.3-cp312-cp312-macosx_10_12_x86_64.whl.metadata (4.1 kB)
+Collecting click>=7.0 (from uvicorn>=0.31.1->mcp<3,>=2.3->agent-handoff-local==0.1.0a1->agent-handoff-local==0.1.0a1)
+  Using cached click-8.5.0-py3-none-any.whl.metadata (2.6 kB)
+agent-handoff-local is already installed with the same version as the provided wheel. Use --force-reinstall to force an installation of the wheel.
+Using cached cryptography-48.0.1-cp311-abi3-macosx_10_9_universal2.whl (8.0 MB)
+Using cached mcp-2.3.0-py3-none-any.whl (368 kB)
+Using cached mcp_types-2.3.0-py3-none-any.whl (69 kB)
+Using cached anyio-4.15.1-py3-none-any.whl (132 kB)
+Using cached cffi-2.1.1-cp312-cp312-macosx_10_15_x86_64.whl (184 kB)
+Using cached httpx2-2.13.1-py3-none-any.whl (95 kB)
+Using cached httpcore2-2.13.1-py3-none-any.whl (83 kB)
+Using cached jsonschema-4.26.0-py3-none-any.whl (90 kB)
+Using cached opentelemetry_api-1.45.0-py3-none-any.whl (60 kB)
+Using cached pyjwt-2.15.1-py3-none-any.whl (33 kB)
+Using cached python_multipart-0.0.32-py3-none-any.whl (30 kB)
+Using cached sse_starlette-3.5.0-py3-none-any.whl (17 kB)
+Using cached starlette-1.7.0-py3-none-any.whl (78 kB)
+Using cached uvicorn-0.54.0-py3-none-any.whl (87 kB)
+Using cached attrs-26.1.0-py3-none-any.whl (67 kB)
+Using cached click-8.5.0-py3-none-any.whl (125 kB)
+Using cached h11-0.16.0-py3-none-any.whl (37 kB)
+Using cached idna-3.20-py3-none-any.whl (69 kB)
+Using cached jsonschema_specifications-2025.9.1-py3-none-any.whl (18 kB)
+Using cached referencing-0.37.0-py3-none-any.whl (26 kB)
+Using cached rpds_py-2026.6.3-cp312-cp312-macosx_10_12_x86_64.whl (343 kB)
+Using cached truststore-0.10.4-py3-none-any.whl (18 kB)
+Using cached pycparser-3.0-py3-none-any.whl (48 kB)
+Installing collected packages: truststore, rpds-py, python-multipart, pyjwt, pycparser, opentelemetry-api, idna, h11, click, attrs, uvicorn, referencing, httpcore2, cffi, anyio, starlette, mcp-types, jsonschema-specifications, httpx2, cryptography, sse-starlette, jsonschema, mcp
+Successfully installed anyio-4.15.1 attrs-26.1.0 cffi-2.1.1 click-8.5.0 cryptography-48.0.1 h11-0.16.0 httpcore2-2.13.1 httpx2-2.13.1 idna-3.20 jsonschema-4.26.0 jsonschema-specifications-2025.9.1 mcp-2.3.0 mcp-types-2.3.0 opentelemetry-api-1.45.0 pycparser-3.0 pyjwt-2.15.1 python-multipart-0.0.32 referencing-0.37.0 rpds-py-2026.6.3 sse-starlette-3.5.0 starlette-1.7.0 truststore-0.10.4 uvicorn-0.54.0
+No broken requirements found.
+{
+  "successful": true,
+  "wheels": [
+    {
+      "version": "0.1.0a1",
+      "python": "3.12.14 (main, Sep 29 2026, 14:49:50) [Clang 22.1.3 ]",
+      "imported_from": "/private/var/folders/bt/z4h84ls13jd_9_733kwp24b80000gn/T/handoff_wheel_vxa3116u/venv/lib/python3.12/site-packages/app/__init__.py",
+      "checks": [
+        "installed_import",
+        "cli_lifecycle",
+        "export",
+        "backup_integrity",
+        "purge_preview",
+        "no_legacy_interfaces",
+        "mcp_stdio_lifecycle"
+      ],
+      "mcp_tools": [
+        "handoff_ack",
+        "handoff_capture",
+        "handoff_claim",
+        "handoff_complete",
+        "handoff_create",
+        "handoff_get",
+        "handoff_list",
+        "handoff_run_check",
+        "handoff_verify"
+      ],
+      "minimal_cli": {
+        "version": "0.1.0a1",
+        "python": "3.12.14 (main, Sep 29 2026, 14:49:50) [Clang 22.1.3 ]",
+        "imported_from": "/private/var/folders/bt/z4h84ls13jd_9_733kwp24b80000gn/T/handoff_wheel_vxa3116u/venv/lib/python3.12/site-packages/app/__init__.py",
+        "checks": [
+          "installed_import",
+          "cli_lifecycle",
+          "export",
+          "backup_integrity",
+          "purge_preview",
+          "no_legacy_interfaces",
+          "minimal_cli_dependencies"
+        ],
+        "mcp_tools": []
+      },
+      "wheel": "agent_handoff_local-0.1.0a1-py3-none-any.whl",
+      "successful": true,
+      "seconds": 24.805
+    }
+  ]
+}

@@ -148,19 +148,11 @@ class EvidenceTests(IsolatedCase):
         self.store.claim(old['id'], 'bob')
         self.assertEqual(self.store.ack(old['id'], 'bob', True)['status'], 'accepted')
 
-    def test_inbox_filters_and_http_gate_use_same_receipts(self):
-        from fastapi.testclient import TestClient
-        from app.main import app
+    def test_inbox_filters_include_open_packages_in_workspace(self):
         h = self.capture()
         self.create(task_id='other', to_agent='eve')
         self.assertEqual([r['id'] for r in self.store.list(to_agent='bob', workspace=str(self.workspace))], [h['id']])
-        receipt = self.claim_verify(h)
-        with TestClient(app) as client:
-            self.assertEqual(client.post(f"/v1/handoffs/{h['id']}/ack", json={'agent_id':'bob', 'accepted': True}).status_code, 409)
-            response = client.post(f"/v1/handoffs/{h['id']}/ack", json={'agent_id':'bob', 'accepted': True,
-                'verification_id': receipt['verification_id']})
-            self.assertEqual(response.status_code, 200, response.text)
-            self.assertEqual(len(client.get(f"/v1/handoffs/{h['id']}/verifications").json()['results']), 1)
+        self.assertEqual(self.store.list(workspace=str(self.root / 'other')), [])
 
     def test_changed_after_verify_rejects_acceptance_without_state_change(self):
         h = self.capture()

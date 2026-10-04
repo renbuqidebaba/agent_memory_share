@@ -12,11 +12,8 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from unittest.mock import patch
 
-from fastapi.testclient import TestClient
-
 from app import db
 from app.handoff_artifacts import prepare_handoff, render_markdown, verify_handoff
-from app.main import app
 from app.models import HandoffCreate
 from app.storage.handoff_store import HandoffConflict, HandoffStore
 
@@ -195,93 +192,73 @@ class StoreTests(IsolatedCase):
         self.assertEqual(self.events(hid).count("handoff.expired"), 1)
 
 
-class ApiTests(IsolatedCase):
-    def setUp(self):
-        super().setUp()
-        context = TestClient(app)
-        self.client = context.__enter__()
-        self.addCleanup(context.__exit__, None, None, None)
-
-    def test_http_lifecycle(self):
-        """API01 真实路由完整生命周期及查询。"""
-        r = self.client.post("/v1/handoffs", json=BASE)
-        self.assertEqual(r.status_code, 200)
-        hid = r.json()["id"]
-        for action, body, status in [("claim", {"agent_id": "bob"}, "claimed"),
-                                     ("ack", {"agent_id": "bob", "accepted": True}, "accepted"),
-                                     ("complete", {"agent_id": "bob"}, "completed")]:
-            r = self.client.post(f"/v1/handoffs/{hid}/{action}", json=body)
-            self.assertEqual(r.status_code, 200, r.text)
-            self.assertEqual(r.json()["status"], status)
-        self.assertEqual(self.client.get(f"/v1/handoffs/{hid}").json()["status"], "completed")
-
-    def test_missing_resource_all_routes(self):
-        """API02 不存在的交接包在读取/领取/确认/完成时返回 404。"""
-        self.assertEqual(self.client.get("/v1/handoffs/missing").status_code, 404)
-        for action, body in [("claim", {"agent_id": "b"}), ("ack", {"agent_id": "b", "accepted": True}), ("complete", {"agent_id": "b"})]:
-            with self.subTest(action=action):
-                self.assertEqual(self.client.post(f"/v1/handoffs/missing/{action}", json=body).status_code, 404)
-
+class CoreInputTests(IsolatedCase):
     def test_invalid_payload_rejected_without_write(self):
-        """API03 缺字段、空字段、错误 TTL 与枚举返回 422，数据库不变。"""
         invalid = [{}, {**BASE, "goal": ""}, {**BASE, "ttl_seconds": 59},
-                   {**BASE, "ttl_seconds": 2592001}, {**BASE, "validation": [{"command": "x", "outcome": "unknown"}]}]
+                   {**BASE, "ttl_seconds": 2592001},
+                   {**BASE, "validation": [{"command": "x", "outcome": "unknown"}]}]
         for body in invalid:
-            with self.subTest(body=body):
-                self.assertEqual(self.client.post("/v1/handoffs", json=body).status_code, 422)
+            with self.subTest(body=body), self.assertRaises(ValueError):
+                self.store.create(HandoffCreate.model_validate(body))
         self.assertEqual(self.store.list(), [])
 
     def test_blank_required_text_rejected(self):
-        """API04 只有空白的任务标识、发送者、目标与状态必须拒绝。"""
         for field in ("task_id", "from_agent", "goal", "status_summary", "to_agent"):
-            with self.subTest(field=field):
-                self.assertEqual(self.client.post("/v1/handoffs", json={**BASE, field: "  \n"}).status_code, 422)
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                HandoffCreate.model_validate({**BASE, field: "  \n"})
+
+    def test_missing_resource_operations(self):
+        self.assertIsNone(self.store.get("missing"))
+        for action in (lambda: self.store.claim("missing", "bob"),
+                       lambda: self.store.ack("missing", "bob", True),
+                       lambda: self.store.complete("missing", "bob")):
+            with self.assertRaises(KeyError):
+                action()
 
     def test_designated_recipient(self):
-        """API05 指定接收者以外的 agent 不能领取。"""
         hid = self.create(to_agent="bob")["id"]
-        self.assertEqual(self.client.post(f"/v1/handoffs/{hid}/claim", json={"agent_id": "eve"}).status_code, 409)
+        with self.assertRaises(HandoffConflict):
+            self.store.claim(hid, "eve")
         self.assertEqual(self.store.get(hid)["status"], "pending")
 
     def test_wrong_owner_cannot_ack_or_complete(self):
-        """API06 非领取者不能确认或完成。"""
         hid = self.create()["id"]
         self.store.claim(hid, "bob")
-        self.assertEqual(self.client.post(f"/v1/handoffs/{hid}/ack", json={"agent_id": "eve", "accepted": True}).status_code, 409)
+        with self.assertRaises(HandoffConflict):
+            self.store.ack(hid, "eve", True)
         self.store.ack(hid, "bob", True)
-        self.assertEqual(self.client.post(f"/v1/handoffs/{hid}/complete", json={"agent_id": "eve"}).status_code, 409)
+        with self.assertRaises(HandoffConflict):
+            self.store.complete(hid, "eve")
 
     def test_cannot_skip_state_transitions(self):
-        """API07 pending 不能直接确认或完成，claimed 不能直接完成。"""
         hid = self.create()["id"]
-        self.assertEqual(self.client.post(f"/v1/handoffs/{hid}/ack", json={"agent_id": "bob", "accepted": True}).status_code, 409)
-        self.assertEqual(self.client.post(f"/v1/handoffs/{hid}/complete", json={"agent_id": "bob"}).status_code, 409)
+        with self.assertRaises(HandoffConflict):
+            self.store.ack(hid, "bob", True)
+        with self.assertRaises(HandoffConflict):
+            self.store.complete(hid, "bob")
         self.store.claim(hid, "bob")
-        self.assertEqual(self.client.post(f"/v1/handoffs/{hid}/complete", json={"agent_id": "bob"}).status_code, 409)
+        with self.assertRaises(HandoffConflict):
+            self.store.complete(hid, "bob")
 
     def test_reject_requires_reason(self):
-        """API08 退回必须填写有效原因，拒绝后仍保持 claimed。"""
         hid = self.create()["id"]
         self.store.claim(hid, "bob")
-        r = self.client.post(f"/v1/handoffs/{hid}/ack", json={"agent_id": "bob", "accepted": False, "reason": "  "})
-        self.assertEqual(r.status_code, 409)
+        with self.assertRaises(ValueError):
+            self.store.ack(hid, "bob", False, "  ")
         self.assertEqual(self.store.get(hid)["status"], "claimed")
 
     def test_lease_validation(self):
-        """API09 不合法的租约长度返回 422。"""
         hid = self.create()["id"]
         for seconds in (0, 59, 86401):
-            with self.subTest(seconds=seconds):
-                self.assertEqual(self.client.post(f"/v1/handoffs/{hid}/claim", json={"agent_id": "bob", "lease_seconds": seconds}).status_code, 422)
+            with self.subTest(seconds=seconds), self.assertRaises(ValueError):
+                self.store.claim(hid, "bob", seconds)
 
-    def test_filter_and_query_parameter_isolation(self):
-        """API10 任务/状态过滤准确，SQL 片段只作为普通参数处理。"""
+    def test_filter_values_are_not_sql(self):
         a = self.create(task_id="a")
         self.create(task_id="b")
         self.store.claim(a["id"], "bob")
-        rows = self.client.get("/v1/handoffs", params={"task_id": "a", "status": "claimed"}).json()["results"]
-        self.assertEqual([r["id"] for r in rows], [a["id"]])
-        self.assertEqual(self.client.get("/v1/handoffs", params={"task_id": "' OR 1=1 --"}).json()["results"], [])
+        self.assertEqual([r["id"] for r in self.store.list("a", "claimed")], [a["id"]])
+        self.assertEqual(self.store.list("' OR 1=1 --"), [])
 
 
 class ArtifactTests(IsolatedCase):

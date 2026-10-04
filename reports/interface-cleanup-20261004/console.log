@@ -1,0 +1,35 @@
+[10/04/26 23:56:56] INFO     Tool 'handoff_ack' failed: 'Error     server.py:453
+                             executing tool handoff_ack:                        
+                             接受交接必须引用本任务、当前领取者的               
+                             核验记录'                                          
+[10/04/26 23:57:00] INFO     Tool 'handoff_claim' failed: 'Error   server.py:453
+                             executing tool handoff_claim:                      
+                             交接包当前状态为 claimed，不可领取'                
+[10/04/26 23:57:04] INFO     Tool 'handoff_create' rejected        server.py:450
+                             arguments: ['payload.from_agent',                  
+                             'payload.goal',                                    
+                             'payload.status_summary',                          
+                             'payload.task_id']                                 
+Executing <Task pending name='Task-30' coro=<McpTests.test_invalid_create_has_no_side_effect() running at /Users/lyw/Documents/agent_memory_share/tests/test_mcp.py:22> wait_for=<Future pending cb=[Task.task_wakeup()] created at /Users/lyw/.local/share/uv/python/cpython-3.12.14-macos-x86_64-none/lib/python3.12/asyncio/base_events.py:448> cb=[_run_until_complete_cb() at /Users/lyw/.local/share/uv/python/cpython-3.12.14-macos-x86_64-none/lib/python3.12/asyncio/base_events.py:181] created at /Users/lyw/.local/share/uv/python/cpython-3.12.14-macos-x86_64-none/lib/python3.12/asyncio/runners.py:100> took 0.109 seconds
+[10/04/26 23:57:06] INFO     Tool 'handoff_get' failed: 'Error     server.py:453
+                             executing tool handoff_get: handoff                
+                             not found'                                         
+                    INFO     Tool 'handoff_verify' failed: 'Error  server.py:453
+                             executing tool handoff_verify:                     
+                             handoff not found'                                 
+{"timestamp_utc": "2026-10-04T15:57:15.261405+00:00", "sqlite": "3.53.1", "duration_seconds": 42.533, "tests_run": 83, "passed": 82, "failed_cases": 1, "skipped": 0, "successful": false}
+None 
+ Traceback (most recent call last):
+  File "/Users/lyw/Documents/agent_memory_share/tests/test_core.py", line 66, in test_cli_and_core_do_not_import_web_or_legacy_services
+    self.assertEqual(result.returncode, 0, result.stderr)
+AssertionError: 1 != 0 : Traceback (most recent call last):
+  File "<string>", line 9, in <module>
+  File "/Users/lyw/Documents/agent_memory_share/server/app/handoff_cli.py", line 10, in <module>
+    from .maintenance import backup_database, export_data, purge_data
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1322, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1262, in _find_spec
+  File "<string>", line 7, in find_spec
+AssertionError: unexpected legacy import: app.maintenance
+
+

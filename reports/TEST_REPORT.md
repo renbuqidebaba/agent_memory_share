@@ -1,3 +1,5 @@
+> 历史验证记录：本文对应移除 HTTP/旧记忆服务之前的版本。当前架构与验证见 [接口精简报告](interface-cleanup-20261004/REPORT.md)。
+
 # Agent Handoff 功能验证报告
 
 测试时间：2026-10-04T00:33:34.121567+08:00（Asia/Shanghai）。被测版本为当前未提交工作区；源文件摘要见 [tested-source-sha256.json](tested-source-sha256.json)。

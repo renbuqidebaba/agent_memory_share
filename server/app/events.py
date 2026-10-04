@@ -1,4 +1,4 @@
-"""append-only 事件日志：每次写操作记一条事件，P2 同步直接复制此表。"""
+"""交接事件日志：与状态变化在同一事务中保存，按显式保留规则清理。"""
 import json
 import sqlite3
 from datetime import datetime, timezone

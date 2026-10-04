@@ -45,8 +45,6 @@ jobs:
         run: uv run --no-sync ruff check .
       - name: Full isolated regression suite including MCP
         run: uv run --no-sync python scripts/run_handoff_tests.py --require-mcp --output reports/local/tests.json
-      - name: Legacy compatibility smoke test
-        run: uv run --no-sync python scripts/smoke_test.py
       - name: Reproducible two-agent handoff demo
         run: uv run --no-sync python scripts/demo_handoff.py --output reports/local/demo
       - name: Build source and wheel distributions
@@ -55,7 +53,7 @@ jobs:
         run: uv run --no-sync python -m twine check --strict dist/*
       - name: Export locked constraints for the clean installation
         run: uv export --frozen --all-extras --no-emit-project --no-hashes --format requirements-txt --output-file reports/local/locked-requirements.txt
-      - name: Verify installed CLI, HTTP and MCP outside the checkout
+      - name: Verify minimal CLI and MCP installations outside the checkout
         run: uv run --no-sync python scripts/check_wheel.py dist/*.whl --constraints reports/local/locked-requirements.txt --output reports/local/wheel.json
       - name: Retain verification reports and distributions
         if: always()

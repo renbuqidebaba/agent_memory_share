@@ -1,4 +1,4 @@
-# 接入 CLI、Codex MCP 与本机 HTTP
+# 接入 CLI 与 stdio MCP
 
 ## 同一份数据库
 
@@ -24,24 +24,18 @@ Codex 重启或新建会话后，用 `codex mcp list` 检查配置；个人配�
 先 `handoff_list` / `handoff_get`，再 claim、verify、ack，任务确实完成后才 complete。
 v2 的 verify 要传 `agent_id`，ack 要引用返回的 `verification_id`，详见 [自动采集与核验](EVOLUTION.md)。
 
-## CLI 与 HTTP
+## CLI
 
 CLI 可用 `agent-handoff --help` 查看命令。`agent-handoff schema` 输出交接输入的 JSON Schema；
-仓库也保存 [v1 Schema](handoff.schema.json)。完整命令示例见 [README](../README.md)。
-HTTP 服务可在仓库根目录运行：
+仓库也保存 [Schema](handoff.schema.json)。完整命令示例见 [README](../README.md)。
 
-```bash
-.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8787
-```
-
-`http://127.0.0.1:8787/docs` 给出 OpenAPI。HTTP `POST /v1/handoffs` 仅存客户端给的 JSON，
-**不会**读取工作区或自动生成产物 SHA-256；需要自动固定工作区证据时用 CLI/MCP。
-HTTP 是本机 REST 接口，不是 MCP 的 HTTP transport。目前没有身份认证，避免公开绑定地址。
+基础安装只需要 Pydantic 和 Python 标准库；MCP 用户额外安装 `.[mcp]`。
+项目没有 HTTP 服务、REST 路由、健康检查端点或网络启动脚本。
+MCP SDK 自身会安装部分 HTTP 传输依赖，但本项目只启动 stdio 传输，不开放网络端口。
 
 ## 常见故障
 
-运行时 SQLite 需要支持 FTS5 与 trigram 分词器；它们随本地数据库一起初始化。
-若出现 `no such module: fts5` 或 `no such tokenizer: trigram`，需换用具备相应 SQLite 支持的 Python 发行版。
+新数据库无需 FTS5 或 trigram 扩展，仅使用交接所需 SQLite 表。
 
 | 现象 | 核查 |
 |---|---|
